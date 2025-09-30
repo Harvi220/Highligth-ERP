@@ -1,0 +1,9 @@
+/* src/components/ui/Card/Card.module.css */
+.card {
+  background-color: var(--color-background-default-default);
+  border: 1px solid var(--color-border-default-default);
+  /* Судя по макету, у карточки скругление больше, чем у инпутов */
+  border-radius: 16px; /* TODO: Вынести в --border-radius-xl */
+  padding: 24px; /* TODO: Вынести в --spacing-xl */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}

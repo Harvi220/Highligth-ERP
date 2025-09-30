@@ -1,0 +1,334 @@
+/* Временно отключаем кастомные шрифты для отладки */
+/*
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("../assets/fonts/Inter-VariableFont_opsz,wght.ttf")
+    format("truetype");
+}
+
+@font-face {
+  font-family: "Inter";
+  font-style: italic;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("../assets/fonts/Inter-Italic-VariableFont_opsz,wght.ttf")
+    format("truetype");
+}
+*/
+
+:root {
+  /*COLORS*/
+  /*---Background---*/
+  /*default*/
+  --color-background-default-default: #ffffff;
+  --color-background-default-default-hover: #f5f5f5;
+  --color-background-default-secondary: #f5f5f5;
+  --color-background-default-secondary-hover: #e6e6e6;
+  /*neutral*/
+  --color-background-neutral-default: #000000;
+  --color-background-neutral-hover: #000000;
+  --color-background-neutral-secondary: #000000;
+  --color-background-neutral-secondary-hover: #000000;
+  /*brand*/
+  --color-background-brand-default: #2c2c2c;
+  --color-background-brand-hover: #000000;
+  --color-background-brand-secondary: #000000;
+  --color-background-brand-secondary-hover: #000000;
+  /*positive*/
+  --color-background-positive-default: #000000;
+  --color-background-positive-hover: #000000;
+  --color-background-positive-secondary: #000000;
+  --color-background-positive-secondary-hover: #000000;
+  /*warning*/
+  --color-background-warning-default: #000000;
+  --color-background-warning-hover: #000000;
+  --color-background-warning-secondary: #000000;
+  --color-background-warning-secondary-hover: #000000;
+  /*danger*/
+  --color-background-danger-default: #000000;
+  --color-background-danger-hover: #000000;
+  --color-background-danger-secondary: #000000;
+  --color-background-danger-secondary-hover: #000000;
+  /*disabled*/
+  --color-background-disabled-default: #000000;
+  /*utilities*/
+  --color-background-utilities-scrim: #000000;
+  --color-background-utilities-blanket: #000000;
+  --color-background-utilities-overlay: #000000;
+  --color-background-utilities-measurement: #000000;
+  /*---Text---*/
+  /*default*/
+  --color-text-default-default: #1e1e1e;
+  --color-text-default-secondary: #000000;
+  --color-text-default-tertiary: #b3b3b3;
+  /*neutral*/
+  --color-text-neutral-default: #000000;
+  --color-text-neutral-secondary: #000000;
+  --color-text-neutral-tertiary: #000000;
+  --color-text-neutral-on-neutral: #000000;
+  --color-text-neutral-on-neutral-secondary: #000000;
+  --color-text-neutral-on-neutral-tertiary: #000000;
+  /*brand*/
+  --color-text-brand-default: #000000;
+  --color-text-brand-secondary: #000000;
+  --color-text-brand-tertiary: #000000;
+  --color-text-brand-on-brand: #f5f5f5;
+  --color-text-brand-on-brand-secondary: #000000;
+  --color-text-brand-on-brand-tertiary: #000000;
+  /*positive*/
+  --color-text-positive-default: #000000;
+  --color-text-positive-secondary: #000000;
+  --color-text-positive-tertiary: #000000;
+  --color-text-positive-on-positive: #000000;
+  --color-text-positive-on-positive-secondary: #000000;
+  --color-text-positive-on-positive-tertiary: #000000;
+  /*warning*/
+  --color-text-warning-default: #000000;
+  --color-text-warning-secondary: #000000;
+  --color-text-warning-tertiary: #000000;
+  --color-text-warning-on-warning: #000000;
+  --color-text-warning-on-warning-secondary: #000000;
+  --color-text-warning-on-warning-tertiary: #000000;
+  /*danger*/
+  --color-text-danger-default: #000000;
+  --color-text-danger-secondary: #000000;
+  --color-text-danger-tertiary: #000000;
+  --color-text-danger-on-danger: #000000;
+  --color-text-danger-on-danger-secondary: #000000;
+  --color-text-danger-on-danger-tertiary: #000000;
+  /*disabled*/
+  --color-text-disabled-default: #000000;
+  --color-text-disabled-on-disabled: #000000;
+  /*utilities*/
+  --color-text-utilities-text-on-overlay: #000000;
+  --color-text-utilities-on-text-on-measurement: #000000;
+  /*---Border---*/
+  /*default*/
+  --color-border-default-default: #d9d9d9;
+  --color-border-default-secondary: #000000;
+  --color-border-default-tertiary: #000000;
+  /*neutral*/
+  --color-border-neutral-default: #000000;
+  --color-border-neutral-secondary: #000000;
+  --color-border-neutral-tertiary: #000000;
+  /*brand*/
+  --color-border-brand-default: #2c2c2c;
+  --color-border-brand-secondary: #000000;
+  --color-border-brand-tertiary: #000000;
+  /*positive*/
+  --color-border-positive-default: #000000;
+  --color-border-positive-secondary: #000000;
+  --color-border-positive-tertiary: #000000;
+  /*warning*/
+  --color-border-warning-default: #000000;
+  --color-border-warning-secondary: #000000;
+  --color-border-warning-tertiary: #000000;
+  /*danger*/
+  --color-border-danger-default: #000000;
+  --color-border-danger-secondary: #000000;
+  --color-border-danger-tertiary: #000000;
+  /*disabled*/
+  --color-border-disabled-default: #000000;
+  /*utilities*/
+  --color-border-utilities-swatch: #000000;
+  --color-border-utilities-measurement: #000000;
+  /*---Icon---*/
+  /*default*/
+  --color-icon-default-default: #000000;
+  --color-icon-default-secondary: #000000;
+  --color-icon-default-tertiary: #000000;
+  /*neutral*/
+  --color-icon-neutral-default: #000000;
+  --color-icon-neutral-secondary: #000000;
+  --color-icon-neutral-tertiary: #000000;
+  --color-icon-neutral-on-neutral: #000000;
+  --color-icon-neutral-on-neutral-secondary: #000000;
+  --color-icon-neutral-on-neutral-tertiary: #000000;
+  /*brand*/
+  --color-icon-brand-default: #000000;
+  --color-icon-brand-secondary: #000000;
+  --color-icon-brand-tertiary: #000000;
+  --color-icon-brand-on-brand: #000000;
+  --color-icon-brand-on-brand-secondary: #000000;
+  --color-icon-brand-on-brand-tertiary: #000000;
+  /*positive*/
+  --color-icon-positive-default: #000000;
+  --color-icon-positive-secondary: #000000;
+  --color-icon-positive-tertiary: #000000;
+  --color-icon-positive-on-positive: #000000;
+  --color-icon-positive-on-positive-secondary: #000000;
+  --color-icon-positive-on-positive-tertiary: #000000;
+  /*warning*/
+  --color-icon-warning-default: #000000;
+  --color-icon-warning-secondary: #000000;
+  --color-icon-warning-tertiary: #000000;
+  --color-icon-warning-on-warning: #000000;
+  --color-icon-warning-on-warning-secondary: #000000;
+  --color-icon-warning-on-warning-tertiary: #000000;
+  /*danger*/
+  --color-icon-danger-default: #000000;
+  --color-icon-danger-secondary: #000000;
+  --color-icon-danger-tertiary: #000000;
+  --color-icon-danger-on-danger: #000000;
+  --color-icon-danger-on-danger-secondary: #000000;
+  --color-icon-danger-on-danger-tertiary: #000000;
+  /*disabled*/
+  --color-icon-disabled-default: #000000;
+  --color-icon-disabled-on-disabled: #000000;
+  /*utilities*/
+  --color-icon-utilities-icon-on-overlay: #000000;
+  --color-icon-utilities-on-icon-on-measurement: #000000;
+  /*BORDERS*/
+  --border-radius-main: 8px;
+  /* Typography - Font Sizes */
+  --font-size-72: 72px;
+  --font-size-48: 48px;
+  --font-size-32: 32px;
+  --font-size-24: 24px;
+  --font-size-20: 20px;
+  --font-size-16: 16px;
+  --font-size-14: 14px;
+
+  /* SPACING */
+  /* Основано на шаге в 5px. Можешь выбрать 4px или 8px, если это больше подходит дизайну */
+  --spacing-xxs: 5px; /* Очень маленький */
+  --spacing-xs: 10px; /* Маленький (твой padding-vertical) */
+  --spacing-sm: 15px; /* Средне-маленький */
+  --spacing-md: 20px; /* Средний (твой padding-horizontal) */
+  --spacing-lg: 30px; /* Большой */
+  --spacing-xl: 40px; /* Очень большой */
+  --spacing-xxl: 60px; /* Огромный */
+
+  /* TYPOGRAPHY */
+  /* --- Font Families --- */
+  --font-family-sans:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif;
+  --font-family-mono:
+    "SF Mono", "Menlo", "Monaco", "Consolas", "Liberation Mono", "Courier New",
+    monospace;
+
+  /* --- Font Weights --- */
+  --font-weight-regular: 400; /* Для Body Base, Body Small */
+  --font-weight-bold: 700; /* Для Strong, Headings */
+  /* Если в Figma есть другие значения, например 500, 600, добавь их сюда */
+
+  /* --- Font Sizes (в rem для доступности, 1rem = 16px) --- */
+  --font-size-72: 4.5rem; /* 72px */
+  --font-size-48: 3rem; /* 48px */
+  --font-size-32: 2rem; /* 32px */
+  --font-size-24: 1.5rem; /* 24px */
+  --font-size-20: 1.25rem; /* 20px */
+  --font-size-16: 1rem; /* 16px */
+  --font-size-14: 0.875rem; /* 14px */
+
+  /* --- Line Heights (используем безразмерные значения для лучшей практики) --- */
+  /* line-height: 120px для разных font-size. Это необычно, но реализуемо */
+  --line-height-120px: 120px;
+  --line-height-140: 1.4; /* 140% -> 1.4 */
+  --line-height-100: 1; /* 100% -> 1.0 */
+}
+
+/* --- Утилитарные классы для стилей текста --- */
+/* Они комбинируют токены выше в готовые стили */
+
+.text-title-hero {
+  font-size: var(--font-size-72);
+  line-height: var(--line-height-120px);
+  font-weight: var(
+    --font-weight-bold
+  ); /* Предположение, т.к. заголовки обычно жирные */
+}
+
+.text-title-page {
+  font-size: var(--font-size-48);
+  line-height: var(--line-height-120px);
+  font-weight: var(--font-weight-bold);
+}
+
+.text-subtitle {
+  font-size: var(--font-size-32);
+  line-height: var(--line-height-120px);
+  font-weight: var(--font-weight-regular);
+}
+
+.text-heading {
+  font-size: var(--font-size-24);
+  line-height: var(--line-height-120px);
+  font-weight: var(--font-weight-bold);
+}
+
+.text-subheading {
+  font-size: var(--font-size-20);
+  line-height: var(--line-height-120px);
+  font-weight: var(--font-weight-bold);
+}
+
+.text-body-base {
+  font-size: var(--font-size-16);
+  line-height: var(--line-height-140);
+  font-weight: var(--font-weight-regular);
+}
+
+.text-body-strong {
+  font-size: var(--font-size-16);
+  line-height: var(--line-height-140);
+  font-weight: var(--font-weight-bold);
+}
+
+.text-body-emphasis {
+  font-size: var(--font-size-16);
+  line-height: var(--line-height-140);
+  font-weight: var(--font-weight-regular);
+  font-style: italic;
+}
+
+.text-body-link {
+  font-size: var(--font-size-16);
+  line-height: var(--line-height-140);
+  font-weight: var(--font-weight-regular);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.text-body-small {
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-140);
+  font-weight: var(--font-weight-regular);
+}
+
+.text-body-small-strong {
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-140);
+  font-weight: var(--font-weight-bold);
+}
+
+.text-body-code {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-16);
+  line-height: var(--line-height-100);
+  font-weight: var(--font-weight-regular);
+}
+
+/* --- Варианты Single Line --- */
+.text-body-base-single {
+  font-size: var(--font-size-16);
+  line-height: var(--line-height-100);
+  font-weight: var(--font-weight-regular);
+}
+
+.text-body-small-strong-single {
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-100);
+  font-weight: var(--font-weight-bold);
+}
+
+body {
+  font-family: var(--font-family-sans);
+  /* Ты можешь добавить сглаживание для лучшего отображения */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}

@@ -1,0 +1,225 @@
+/* src/pages/DocumentsPage/DocumentsPage.module.css */
+
+.page {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+  padding: 20px;
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* Заголовок пользователя */
+.userHeader {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.userInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.userName {
+  font-size: 24px;
+  font-weight: 600;
+  color: #333333;
+  margin: 0;
+}
+
+.userPosition {
+  font-size: 16px;
+  color: #999999;
+  margin: 0;
+}
+
+/* Заголовок страницы */
+.pageTitle {
+  font-size: 32px;
+  font-weight: 700;
+  color: #333333;
+  margin: 0 0 32px 0;
+}
+
+/* Список документов */
+.documentsList {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.documentCard {
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e5e5e5;
+}
+
+.documentHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.documentTitle {
+  font-size: 20px;
+  font-weight: 600;
+  color: #333333;
+  margin: 0;
+  flex: 1;
+  padding-right: 16px;
+}
+
+.downloadButton {
+  background: none;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+  color: #666666;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.downloadButton:hover {
+  background-color: #f5f5f5;
+  color: #333333;
+}
+
+.documentDescription {
+  font-size: 14px;
+  color: #666666;
+  line-height: 1.5;
+  margin: 0 0 20px 0;
+}
+
+.documentActions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.actionButton {
+  border: none;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.unreadButton {
+  background-color: #ff4757;
+  color: white;
+}
+
+.unreadButton:hover {
+  background-color: #e63946;
+}
+
+.readButton {
+  background-color: #e5e5e5;
+  color: #666666;
+}
+
+.readButton:hover {
+  background-color: #d1d5db;
+}
+
+/* Состояния загрузки и ошибок */
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  font-size: 18px;
+  color: #666666;
+}
+
+.error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  min-height: 200px;
+  justify-content: center;
+  font-size: 16px;
+  color: #dc3545;
+  text-align: center;
+}
+
+.retryButton {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.retryButton:hover {
+  background-color: #0056b3;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .page {
+    padding: 16px;
+  }
+
+  .container {
+    max-width: 100%;
+  }
+
+  .userHeader {
+    margin-bottom: 24px;
+  }
+
+  .avatar {
+    width: 60px;
+    height: 60px;
+  }
+
+  .userName {
+    font-size: 20px;
+  }
+
+  .pageTitle {
+    font-size: 28px;
+    margin-bottom: 24px;
+  }
+
+  .documentCard {
+    padding: 20px;
+  }
+
+  .documentHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .documentTitle {
+    padding-right: 0;
+  }
+
+  .downloadButton {
+    align-self: flex-end;
+  }
+}

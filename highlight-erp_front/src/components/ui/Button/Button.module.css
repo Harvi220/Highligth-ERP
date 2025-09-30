@@ -1,0 +1,87 @@
+/* src/components/ui/Button/Button.module.css */
+
+/* Базовые стили для всех кнопок */
+.button {
+  /* Было: padding: 10px 20px; -> Стало: используем переменные для отступов */
+  padding: var(--spacing-xs);
+  padding: var(--spacing-md);
+
+  /* Было: border-radius: 8px; -> Стало: */
+  border-radius: var(--border-radius-main);
+
+  /* Используем готовый класс для типографики, если нужно */
+  /* Например, можно добавить класс .text-body-strong из global.css в JSX */
+  /* Или определить стили здесь */
+  font-size: var(--font-size-16);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-100); /* Для центрирования текста в кнопке */
+
+  border: none;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease-in-out,
+    transform 0.1s ease-in-out,
+    border-color 0.2s ease-in-out,
+    color 0.2s ease-in-out;
+
+  /* Улучшение для доступности */
+  outline-offset: 2px;
+}
+
+.button:focus-visible {
+  /* Вместо outline: none; добавляем красивый фокус для клавиатуры */
+  outline: 2px solid var(--color-border-brand-default);
+}
+
+.button:hover {
+  opacity: 0.9;
+}
+
+.button:active {
+  transform: scale(0.98);
+}
+
+.button:disabled {
+  /* Было: background-color: #cccccc; color: #666666; -> Стало: */
+  background-color: var(--color-background-disabled-default);
+  color: var(--color-text-disabled-on-disabled);
+  border-color: transparent; /* Убираем рамку у disabled secondary кнопки */
+  cursor: not-allowed;
+  opacity: 1; /* Оставляем, чтобы цвет был виден как есть */
+  transform: none;
+}
+
+/* Стили для варианта 'primary' */
+.primary {
+  /* Было: background-color: #007bff; color: white; -> Стало: */
+  background-color: var(--color-background-brand-default);
+  color: var(--color-text-brand-on-brand);
+}
+
+/* Стили для варианта 'secondary' */
+.secondary {
+  /* Было: background-color: white; color: #007bff; border: 1px solid #007bff; -> Стало: */
+  background-color: var(--color-background-default-default);
+  color: var(--color-text-brand-default);
+  border: 1px solid var(--color-border-brand-default);
+}
+
+.secondary:hover {
+  background-color: var(--color-background-default-default-hover);
+  opacity: 1; /* Переопределяем базовый hover, т.к. меняем цвет фона */
+}
+
+/* Стили для варианта 'text' */
+.text {
+  background-color: transparent;
+  /* Было: color: #007bff; -> Стало: */
+  color: var(--color-text-brand-default);
+  padding: 10px;
+  border: none;
+}
+.text:hover {
+  /* Было: background-color: rgba(0, 123, 255, 0.1); -> Стало: */
+  /* Используем вторичный фон, он обычно светлее */
+  background-color: var(--color-background-default-secondary);
+  opacity: 1; /* Также переопределяем */
+}

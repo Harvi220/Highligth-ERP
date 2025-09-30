@@ -1,0 +1,113 @@
+/* src/components/ui/Input/Input.module.css */
+
+.container {
+  width: 100%;
+}
+
+.label {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+
+  font-size: var(--font-size-16);
+  color: var(--color-text-default-tertiary);
+
+  /* Отключаем перехват кликов, чтобы можно было кликнуть "сквозь" метку в инпут */
+  pointer-events: none;
+
+  /* Анимация движения */
+  transition: all 0.2s ease-out;
+}
+
+.inputWrapper {
+  position: relative; /* Это нужно, чтобы позиционировать label относительно обертки */
+}
+
+.input {
+  width: 100%;
+  padding: 24px 16px 8px 16px; /* Верхний паддинг больше, чтобы было место для "всплывшей" метки */
+  font-size: var(--font-size-16);
+  color: var(--color-text-default-default);
+
+  /* Судя по скриншоту, фон инпута немного отличается */
+  background-color: #f0f4f8; /* TODO: Заменить на переменную из Figma */
+  border: 1px solid transparent; /* Убираем рамку в обычном состоянии */
+  border-radius: var(--border-radius-lg, 12px);
+
+  transition: border-color 0.2s ease-in-out;
+}
+
+/* Стили для плейсхолдера */
+.input::placeholder {
+  color: var(--color-text-default-tertiary);
+}
+
+.input:focus ~ .label,
+.input:not(:placeholder-shown) ~ .label {
+  top: 8px; /* Поднимаем метку наверх */
+  transform: scale(0.75); /* Уменьшаем ее */
+  transform-origin: left;
+  color: var(--color-text-default-secondary);
+}
+
+.input:disabled {
+  background-color: var(--color-background-disabled-default);
+  color: var(--color-text-disabled-default);
+  cursor: not-allowed;
+  border-color: var(--color-border-disabled-default);
+}
+
+.input.error {
+  border-color: var(--color-border-danger-default);
+}
+
+.input.error:focus {
+  border-color: var(--color-border-danger-default);
+  box-shadow: 0 0 0 3px var(--color-background-danger-secondary); /* Используем переменную */
+}
+
+.errorMessage {
+  composes: text-body-small from global;
+  color: var(--color-text-danger-default);
+  margin: 0;
+  padding-left: var(--spacing-xs, 10px);
+}
+
+/* Стили для простого варианта */
+.simpleLabel {
+  display: block;
+  font-size: var(--font-size-14);
+  color: var(--color-text-default-default);
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.simpleInput {
+  width: 100%;
+  padding: 16px;
+  font-size: var(--font-size-16);
+  color: var(--color-text-default-default);
+  background-color: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  transition: border-color 0.2s ease-in-out;
+}
+
+.simpleInput::placeholder {
+  color: #9ca3af;
+}
+
+.simpleInput:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.simpleInput.error {
+  border-color: var(--color-border-danger-default);
+}
+
+.simpleInput.error:focus {
+  border-color: var(--color-border-danger-default);
+  box-shadow: 0 0 0 3px var(--color-background-danger-secondary);
+}
