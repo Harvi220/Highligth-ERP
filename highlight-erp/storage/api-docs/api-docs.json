@@ -1,0 +1,1140 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Highlight ERP API Documentation",
+        "description": "Документация API для проекта Highlight ERP",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://127.0.0.1:8000",
+            "description": "Основной API сервер"
+        }
+    ],
+    "paths": {
+        "/api/admin/documents": {
+            "get": {
+                "tags": [
+                    "Администратор - Документы"
+                ],
+                "summary": "Получение списка всех документов",
+                "operationId": "getDocuments",
+                "responses": {
+                    "200": {
+                        "description": "Успешный ответ",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Document"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Администратор - Документы"
+                ],
+                "summary": "Загрузка нового документа",
+                "operationId": "storeDocument",
+                "requestBody": {
+                    "description": "Данные для загрузки документа. Используйте multipart/form-data.",
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "title",
+                                    "file"
+                                ],
+                                "properties": {
+                                    "title": {
+                                        "description": "Название документа",
+                                        "type": "string"
+                                    },
+                                    "file": {
+                                        "description": "Файл документа (PDF, DOCX, XLSX)",
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "is_for_all_employees": {
+                                        "description": "Назначить всем сотрудникам",
+                                        "type": "boolean"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Документ успешно создан",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Document"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Ошибка валидации"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/admin/documents/{document}": {
+            "post": {
+                "tags": [
+                    "Администратор - Документы"
+                ],
+                "summary": "Обновление документа (включая замену файла)",
+                "description": "Позволяет изменить название, флаг и/или заменить файл. Статусы ознакомления не сбрасываются. Используйте multipart/form-data и метод POST с полем _method=PUT.",
+                "operationId": "updateDocument",
+                "parameters": [
+                    {
+                        "name": "document",
+                        "in": "path",
+                        "description": "ID документа для обновления",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "_method": {
+                                        "description": "Обязательно для эмуляции PUT-запроса.",
+                                        "type": "string",
+                                        "default": "PUT",
+                                        "enum": [
+                                            "PUT"
+                                        ]
+                                    },
+                                    "title": {
+                                        "description": "Новое название (опционально)",
+                                        "type": "string"
+                                    },
+                                    "file": {
+                                        "description": "Новый файл (опционально)",
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "is_for_all_employees": {
+                                        "description": "Новое значение флага (опционально)",
+                                        "type": "boolean"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Документ успешно обновлен",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Document"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Документ не найден"
+                    },
+                    "422": {
+                        "description": "Ошибка валидации"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Администратор - Документы"
+                ],
+                "summary": "Удаление документа",
+                "operationId": "deleteDocument",
+                "parameters": [
+                    {
+                        "name": "document",
+                        "in": "path",
+                        "description": "ID документа",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Документ успешно удален"
+                    },
+                    "404": {
+                        "description": "Документ не найден"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/admin/statistics": {
+            "get": {
+                "tags": [
+                    "Администратор - Статистика"
+                ],
+                "summary": "Получение статистики по ознакомлению сотрудников",
+                "operationId": "getStatistics",
+                "responses": {
+                    "200": {
+                        "description": "Успешный ответ со статистикой",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/UserStatistics"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/admin/users": {
+            "get": {
+                "tags": [
+                    "Администратор - Сотрудники"
+                ],
+                "summary": "Получение списка всех сотрудников",
+                "operationId": "9ded17315e13756cd593b5840cd39a26",
+                "responses": {
+                    "200": {
+                        "description": "Успешный ответ",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/User"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Администратор - Сотрудники"
+                ],
+                "summary": "Создание нового сотрудника",
+                "operationId": "f6f90d5fbbe24f66eb2b43901e0d3f38",
+                "requestBody": {
+                    "description": "Данные нового сотрудника",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StoreUserRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Сотрудник успешно создан",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Ошибка валидации"
+                    },
+                    "500": {
+                        "description": "Внутренняя ошибка сервера"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/admin/users/{user}": {
+            "get": {
+                "tags": [
+                    "Администратор - Сотрудники"
+                ],
+                "summary": "Получение информации о конкретном сотруднике",
+                "operationId": "getUserById",
+                "parameters": [
+                    {
+                        "name": "user",
+                        "in": "path",
+                        "description": "ID сотрудника",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Успешный ответ",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Сотрудник не найден"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Администратор - Сотрудники"
+                ],
+                "summary": "Обновление данных сотрудника",
+                "operationId": "updateUser",
+                "parameters": [
+                    {
+                        "name": "user",
+                        "in": "path",
+                        "description": "ID сотрудника",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Обновленные данные сотрудника",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateUserRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Сотрудник успешно обновлен",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Сотрудник не найден"
+                    },
+                    "422": {
+                        "description": "Ошибка валидации или бизнес-логики"
+                    },
+                    "500": {
+                        "description": "Внутренняя ошибка сервера"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Администратор - Сотрудники"
+                ],
+                "summary": "Удаление сотрудника",
+                "operationId": "deleteUser",
+                "parameters": [
+                    {
+                        "name": "user",
+                        "in": "path",
+                        "description": "ID сотрудника",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Сотрудник успешно удален"
+                    },
+                    "404": {
+                        "description": "Сотрудник не найден"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/login": {
+            "post": {
+                "tags": [
+                    "Аутентификация"
+                ],
+                "summary": "Аутентификация пользователя",
+                "operationId": "222b2625838e3c57e017987f73598fda",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "phone",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "phone": {
+                                        "type": "string",
+                                        "format": "phone",
+                                        "example": "79990001122"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "password"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Успешная аутентификация",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "user": {
+                                            "$ref": "#/components/schemas/User"
+                                        },
+                                        "token": {
+                                            "type": "string",
+                                            "example": "1|aBcDeFgHiJkLmNoPqRsTuVwXyZ"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Ошибка валидации"
+                    }
+                }
+            }
+        },
+        "/api/logout": {
+            "post": {
+                "tags": [
+                    "Аутентификация"
+                ],
+                "summary": "Выход из системы",
+                "operationId": "ad65cbbd4e9f201619eae184a5961a98",
+                "responses": {
+                    "200": {
+                        "description": "Успешный выход",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Вы успешно вышли из системы."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Не аутентифицирован"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/employee/documents": {
+            "get": {
+                "tags": [
+                    "Сотрудник - Документы"
+                ],
+                "summary": "Получение списка назначенных документов",
+                "operationId": "getEmployeeDocuments",
+                "responses": {
+                    "200": {
+                        "description": "Успешный ответ",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Document"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/employee/documents/{document}/read": {
+            "post": {
+                "tags": [
+                    "Сотрудник - Документы"
+                ],
+                "summary": "Подтверждение ознакомления с документом",
+                "operationId": "markDocumentAsRead",
+                "parameters": [
+                    {
+                        "name": "document",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Статус успешно обновлен"
+                    },
+                    "403": {
+                        "description": "Документ не назначен"
+                    },
+                    "409": {
+                        "description": "Документ уже был прочитан"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/employee/documents/{document}": {
+            "get": {
+                "tags": [
+                    "Сотрудник - Документы"
+                ],
+                "summary": "Получение детальной информации о документе",
+                "operationId": "getEmployeeDocumentDetails",
+                "parameters": [
+                    {
+                        "name": "document",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Успешный ответ",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Document"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Документ не назначен"
+                    },
+                    "404": {
+                        "description": "Документ не найден"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/employee/profile": {
+            "get": {
+                "tags": [
+                    "Сотрудник - Профиль"
+                ],
+                "summary": "Получение данных профиля текущего сотрудника",
+                "operationId": "getEmployeeProfile",
+                "responses": {
+                    "200": {
+                        "description": "Успешный ответ",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Сотрудник - Профиль"
+                ],
+                "summary": "Обновление ФИО сотрудника",
+                "operationId": "updateEmployeeProfile",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "last_name",
+                                    "first_name"
+                                ],
+                                "properties": {
+                                    "last_name": {
+                                        "type": "string"
+                                    },
+                                    "first_name": {
+                                        "type": "string"
+                                    },
+                                    "patronymic": {
+                                        "type": "string",
+                                        "nullable": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Данные успешно обновлены",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/employee/profile/change-password": {
+            "post": {
+                "tags": [
+                    "Сотрудник - Профиль"
+                ],
+                "summary": "Смена пароля сотрудника",
+                "operationId": "changeEmployeePassword",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "password",
+                                    "password_confirmation"
+                                ],
+                                "properties": {
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password"
+                                    },
+                                    "password_confirmation": {
+                                        "type": "string",
+                                        "format": "password"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Пароль успешно изменен"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/employee/profile/avatar": {
+            "post": {
+                "tags": [
+                    "Сотрудник - Профиль"
+                ],
+                "summary": "Загрузка/обновление аватара сотрудника",
+                "operationId": "updateEmployeeAvatar",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "avatar"
+                                ],
+                                "properties": {
+                                    "avatar": {
+                                        "description": "Файл изображения (jpg, png)",
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Аватар успешно обновлен",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "avatar_url": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "StoreUserRequest": {
+                "title": "StoreUserRequest",
+                "description": "Данные для создания нового сотрудника",
+                "required": [
+                    "last_name",
+                    "first_name",
+                    "position",
+                    "phone",
+                    "password"
+                ],
+                "properties": {
+                    "last_name": {
+                        "description": "Фамилия",
+                        "type": "string",
+                        "example": "Петров"
+                    },
+                    "first_name": {
+                        "description": "Имя",
+                        "type": "string",
+                        "example": "Петр"
+                    },
+                    "patronymic": {
+                        "description": "Отчество",
+                        "type": "string",
+                        "example": "Петрович",
+                        "nullable": true
+                    },
+                    "position_id": {
+                        "description": "ID должности",
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "phone": {
+                        "description": "Номер телефона (логин)",
+                        "type": "string",
+                        "example": "79991234502"
+                    },
+                    "password": {
+                        "description": "Пароль (минимум 8 символов)",
+                        "type": "string",
+                        "format": "password",
+                        "example": "password123"
+                    },
+                    "documents": {
+                        "description": "Массив ID документов для назначения",
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "example": [
+                            1,
+                            2
+                        ]
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateUserRequest": {
+                "title": "UpdateUserRequest",
+                "description": "Данные для обновления сотрудника",
+                "required": [
+                    "last_name",
+                    "first_name",
+                    "position",
+                    "phone"
+                ],
+                "properties": {
+                    "last_name": {
+                        "description": "Фамилия",
+                        "type": "string",
+                        "example": "Петров"
+                    },
+                    "first_name": {
+                        "description": "Имя",
+                        "type": "string",
+                        "example": "Петр"
+                    },
+                    "patronymic": {
+                        "description": "Отчество",
+                        "type": "string",
+                        "example": "Петрович",
+                        "nullable": true
+                    },
+                    "position": {
+                        "description": "Должность",
+                        "type": "string",
+                        "example": "Старший повар"
+                    },
+                    "phone": {
+                        "description": "Номер телефона (логин)",
+                        "type": "string",
+                        "example": "79991234502"
+                    },
+                    "password": {
+                        "description": "Пароль (минимум 8 символов)",
+                        "type": "string",
+                        "format": "password",
+                        "example": "password123",
+                        "nullable": true
+                    },
+                    "documents": {
+                        "description": "Массив ID документов для назначения",
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "example": [
+                            1,
+                            2
+                        ]
+                    }
+                },
+                "type": "object"
+            },
+            "DocumentStatus": {
+                "title": "Document Status",
+                "description": "Статус одного документа в списке статистики",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "title": {
+                        "type": "string",
+                        "example": "Правила компании"
+                    },
+                    "status": {
+                        "type": "string",
+                        "enum": [
+                            "assigned",
+                            "read"
+                        ],
+                        "example": "read"
+                    }
+                },
+                "type": "object"
+            },
+            "UserStatistics": {
+                "title": "User Statistics",
+                "description": "Статистика по документам для одного сотрудника",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "last_name": {
+                        "type": "string",
+                        "example": "Батырев"
+                    },
+                    "first_name": {
+                        "type": "string",
+                        "example": "К.В."
+                    },
+                    "patronymic": {
+                        "type": "string",
+                        "example": "",
+                        "nullable": true
+                    },
+                    "position": {
+                        "type": "string",
+                        "example": "Бармен"
+                    },
+                    "avatar_url": {
+                        "description": "Полный URL аватара",
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "documents": {
+                        "description": "Список назначенных документов и их статусы",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/DocumentStatus"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "Document": {
+                "title": "Document",
+                "description": "Модель документа",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": "true",
+                        "example": "1"
+                    },
+                    "title": {
+                        "description": "Название документа",
+                        "type": "string",
+                        "example": "Инструкция по технике безопасности"
+                    },
+                    "description": {
+                        "description": "Краткое описание",
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "file_path": {
+                        "description": "Путь к файлу в хранилище",
+                        "type": "string",
+                        "example": "documents/xyz.pdf"
+                    },
+                    "original_filename": {
+                        "description": "Исходное имя файла",
+                        "type": "string",
+                        "example": "instrukciya.pdf"
+                    },
+                    "file_mime_type": {
+                        "description": "MIME-тип файла",
+                        "type": "string",
+                        "example": "application/pdf"
+                    },
+                    "file_size": {
+                        "description": "Размер файла в байтах",
+                        "type": "integer",
+                        "example": "102400"
+                    },
+                    "is_for_all_employees": {
+                        "description": "Флаг 'Назначить всем'",
+                        "type": "boolean",
+                        "example": false
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": "true"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": "true"
+                    }
+                },
+                "type": "object"
+            },
+            "User": {
+                "title": "User",
+                "description": "Модель пользователя",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": "true",
+                        "example": "1"
+                    },
+                    "last_name": {
+                        "description": "Фамилия",
+                        "type": "string",
+                        "example": "Иванов"
+                    },
+                    "first_name": {
+                        "description": "Имя",
+                        "type": "string",
+                        "example": "Иван"
+                    },
+                    "patronymic": {
+                        "description": "Отчество",
+                        "type": "string",
+                        "example": "Иванович",
+                        "nullable": true
+                    },
+                    "position": {
+                        "description": "Должность",
+                        "type": "string",
+                        "example": "Главный администратор"
+                    },
+                    "phone": {
+                        "description": "Номер телефона (логин)",
+                        "type": "string",
+                        "example": "79990001122"
+                    },
+                    "role": {
+                        "description": "Роль пользователя",
+                        "type": "string",
+                        "enum": [
+                            "admin",
+                            "employee"
+                        ],
+                        "example": "admin"
+                    },
+                    "created_at": {
+                        "description": "Дата создания",
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": "true"
+                    },
+                    "updated_at": {
+                        "description": "Дата обновления",
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": "true"
+                    }
+                },
+                "type": "object"
+            }
+        },
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "description": "Введите Bearer токен для доступа к защищенным эндпоинтам",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Администратор - Документы",
+            "description": "Администратор - Документы"
+        },
+        {
+            "name": "Администратор - Статистика",
+            "description": "Администратор - Статистика"
+        },
+        {
+            "name": "Администратор - Сотрудники",
+            "description": "Администратор - Сотрудники"
+        },
+        {
+            "name": "Аутентификация",
+            "description": "Аутентификация"
+        },
+        {
+            "name": "Сотрудник - Документы",
+            "description": "Сотрудник - Документы"
+        },
+        {
+            "name": "Сотрудник - Профиль",
+            "description": "Сотрудник - Профиль"
+        }
+    ],
+    "security": [
+        {
+            "bearerAuth": []
+        }
+    ]
+}
