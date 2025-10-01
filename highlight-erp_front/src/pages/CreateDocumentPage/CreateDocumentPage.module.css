@@ -1,0 +1,213 @@
+/* src/pages/CreateDocumentPage/CreateDocumentPage.module.css */
+.container {
+  min-height: 100vh;
+  padding: 20px;
+  background-color: #f5f5f5;
+  display: flex;
+  flex-direction: column;
+}
+
+.backButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: none;
+  font-size: 16px;
+  color: #333;
+  cursor: pointer;
+  margin-bottom: 24px;
+  padding: 0;
+}
+
+.backButton:hover {
+  color: #000;
+}
+
+.title {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 32px;
+  color: #333;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.label {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+}
+
+.input {
+  padding: 12px 16px;
+  font-size: 16px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #fff;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.input:focus {
+  border-color: #4CAF50;
+}
+
+.input::placeholder {
+  color: #999;
+}
+
+.textarea {
+  padding: 12px 16px;
+  font-size: 16px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #fff;
+  outline: none;
+  transition: border-color 0.2s;
+  resize: vertical;
+  font-family: inherit;
+}
+
+.textarea:focus {
+  border-color: #4CAF50;
+}
+
+.textarea::placeholder {
+  color: #999;
+}
+
+.checkboxGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  font-weight: 600;
+  color: #333;
+}
+
+.checkbox {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  accent-color: #4CAF50;
+}
+
+.checkboxText {
+  font-size: 16px;
+}
+
+.checkboxDescription {
+  font-size: 14px;
+  color: #666;
+  margin-left: 32px;
+  line-height: 1.5;
+}
+
+.fileUploadGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.fileInput {
+  display: none;
+}
+
+.fileUploadButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 24px;
+  background-color: #fff;
+  border: 2px dashed #4CAF50;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #4CAF50;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.fileUploadButton:hover {
+  background-color: #f0f9f0;
+  border-color: #45a049;
+}
+
+.fileName {
+  font-size: 14px;
+  color: #666;
+  padding-left: 8px;
+}
+
+.createButton {
+  padding: 16px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin-top: auto;
+}
+
+.createButton:hover:not(:disabled) {
+  background-color: #45a049;
+}
+
+.createButton:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+  .title {
+    font-size: 24px;
+  }
+
+  .label {
+    font-size: 14px;
+  }
+
+  .input,
+  .textarea {
+    font-size: 14px;
+  }
+
+  .checkboxText {
+    font-size: 14px;
+  }
+
+  .checkboxDescription {
+    font-size: 12px;
+  }
+
+  .fileUploadButton {
+    font-size: 14px;
+    padding: 10px 20px;
+  }
+
+  .createButton {
+    font-size: 16px;
+  }
+}

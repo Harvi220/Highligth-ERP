@@ -9,10 +9,21 @@ export interface LoginRequest {
 export interface LoginResponse {
   user: {
     id: number;
-    name: string;
-    position?: string;
+    last_name: string;
+    first_name: string;
+    patronymic: string | null;
+    position?: {
+      id: number;
+      name: string;
+    };
     phone: string;
-    role: string;
+    role?: {
+      id: number;
+      name: string;
+    };
+    avatar_url: string | null;
+    created_at: string;
+    updated_at: string;
   };
   token: string;
 }
@@ -22,9 +33,12 @@ export const login = async (credentials: LoginRequest): Promise<LoginResponse> =
   try {
     const response = await api.post('/login', credentials);
 
-    // Сохраняем токен в localStorage
+    // Сохраняем токен и данные пользователя в localStorage
     if (response.data.token) {
       localStorage.setItem('auth_token', response.data.token);
+    }
+    if (response.data.user) {
+      localStorage.setItem('user_data', JSON.stringify(response.data.user));
     }
 
     return response.data;
@@ -41,8 +55,9 @@ export const logout = async (): Promise<void> => {
   } catch (error) {
     console.error('Ошибка при выходе:', error);
   } finally {
-    // Всегда очищаем токен, даже если запрос завершился ошибкой
+    // Всегда очищаем токен и данные пользователя, даже если запрос завершился ошибкой
     localStorage.removeItem('auth_token');
+    localStorage.removeItem('user_data');
   }
 };
 

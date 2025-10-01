@@ -27,6 +27,7 @@ class EloquentDocumentRepository implements DocumentRepositoryInterface
 
       $document = Document::create([
         'title' => $data['title'],
+        'description' => $data['description'] ?? null,
         'file_path' => $filePath,
         'original_filename' => $file->getClientOriginalName(),
         'file_mime_type' => $file->getClientMimeType(),

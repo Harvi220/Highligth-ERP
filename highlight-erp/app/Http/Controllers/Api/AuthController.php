@@ -73,6 +73,9 @@ class AuthController extends Controller
             ]);
         }
 
+        // Загружаем связи role и position
+        $user->load(['role', 'position']);
+
         $token = $user->createToken('api-token')->plainTextToken;
 
         return response()->json([

@@ -23,10 +23,14 @@ const LoginPage = () => {
       setLoading(true);
       setError(null);
 
-      await login({ phone, password });
+      const response = await login({ phone, password });
 
-      // Успешный вход - перенаправляем на страницу документов
-      navigate("/documents");
+      // Перенаправляем в зависимости от роли пользователя
+      if (response.user.role?.name === "admin") {
+        navigate("/admin/documents");
+      } else {
+        navigate("/documents");
+      }
     } catch (err: unknown) {
       console.error("Ошибка входа:", err);
       const errorMessage =
