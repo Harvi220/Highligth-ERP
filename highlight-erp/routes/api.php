@@ -91,6 +91,11 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::apiResource('documents', DocumentController::class);
 
         /**
+         * Эндпоинт для скачивания документа администратором.
+         */
+        Route::get('documents/{document}/download', [DocumentController::class, 'download']);
+
+        /**
          * Эндпоинт для получения сводной статистики по ознакомлению
          * сотрудников с документами.
          */
@@ -110,6 +115,7 @@ Route::middleware('auth:sanctum')->group(function () {
         // --- Документы ---
         Route::get('documents', [EmployeeDocumentController::class, 'index']);
         Route::get('documents/{document}/content', [EmployeeDocumentController::class, 'content']);
+        Route::get('documents/{document}/download', [EmployeeDocumentController::class, 'download']);
         Route::get('documents/{document}', [EmployeeDocumentController::class, 'show']);
         Route::post('documents/{document}/read', [EmployeeDocumentController::class, 'markAsRead']);
 

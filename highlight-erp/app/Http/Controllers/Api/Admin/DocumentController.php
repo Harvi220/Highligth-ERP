@@ -143,4 +143,38 @@ class DocumentController extends Controller
         $this->documentRepository->delete($document);
         return response()->json(['message'=> 'Документ успешно удален.']);
     }
+
+    /**
+     * @OA\Get(
+     *      path="/api/admin/documents/{document}/download",
+     *      operationId="downloadDocument",
+     *      summary="Скачивание документа",
+     *      tags={"Администратор - Документы"},
+     *      security={{"bearerAuth":{}}},
+     *      @OA\Parameter(
+     *          name="document",
+     *          description="ID документа",
+     *          required=true,
+     *          in="path",
+     *          @OA\Schema(type="integer")
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Файл документа",
+     *          @OA\MediaType(mediaType="application/octet-stream")
+     *      ),
+     *      @OA\Response(response=404, description="Документ не найден")
+     * )
+     */
+    public function download(Document $document)
+    {
+        if (!$document->file_path || !\Illuminate\Support\Facades\Storage::disk('public')->exists($document->file_path)) {
+            return response()->json(['message' => 'Файл документа не найден.'], 404);
+        }
+
+        return \Illuminate\Support\Facades\Storage::disk('public')->download(
+            $document->file_path,
+            $document->original_filename
+        );
+    }
 }

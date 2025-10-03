@@ -35,14 +35,15 @@ const DocumentsPage = () => {
 
   const handleDownload = async (docId: number) => {
     try {
+      const doc = documents.find(d => d.id === docId);
       const blob = await downloadDocument(docId);
       const url = window.URL.createObjectURL(blob);
-      const link = document.createElement('a');
+      const link = window.document.createElement('a');
       link.href = url;
-      link.download = `document-${docId}.pdf`;
-      document.body.appendChild(link);
+      link.download = doc?.original_filename || `document-${docId}.pdf`;
+      window.document.body.appendChild(link);
       link.click();
-      document.body.removeChild(link);
+      window.document.body.removeChild(link);
       window.URL.revokeObjectURL(url);
     } catch (err) {
       console.error('Ошибка при скачивании:', err);

@@ -166,4 +166,43 @@ class DocumentController extends Controller
         ]);
     }
 
+    /**
+     * @OA\Get(
+     *      path="/api/employee/documents/{document}/download",
+     *      operationId="downloadEmployeeDocument",
+     *      summary="Скачивание документа сотрудником",
+     *      tags={"Сотрудник - Документы"},
+     *      security={{"bearerAuth":{}}},
+     *      @OA\Parameter(name="document", in="path", required=true, @OA\Schema(type="integer")),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Файл документа",
+     *          @OA\MediaType(mediaType="application/octet-stream")
+     *      ),
+     *      @OA\Response(response=403, description="Документ не назначен"),
+     *      @OA\Response(response=404, description="Документ или файл не найден")
+     * )
+     */
+    public function download(Document $document)
+    {
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+
+        $assignedDocument = $user->documents()->find($document->id);
+
+        if (!$assignedDocument) {
+            return response()->json(['message' => 'Этот документ вам не назначен.'], 403);
+        }
+
+        // Проверяем наличие файла
+        if (!$assignedDocument->file_path || !Storage::disk('public')->exists($assignedDocument->file_path)) {
+            return response()->json(['message' => 'Файл документа не найден.'], 404);
+        }
+
+        return Storage::disk('public')->download(
+            $assignedDocument->file_path,
+            $assignedDocument->original_filename
+        );
+    }
+
 }

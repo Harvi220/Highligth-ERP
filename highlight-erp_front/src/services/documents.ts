@@ -9,6 +9,9 @@ export interface Document {
   created_at?: string;
   updated_at?: string;
   file_path?: string;
+  original_filename?: string;
+  file_mime_type?: string;
+  file_size?: number;
 }
 
 export interface User {
@@ -75,7 +78,7 @@ export const getDocumentContent = async (documentId: number): Promise<DocumentCo
 // Скачивание документа
 export const downloadDocument = async (documentId: number): Promise<Blob> => {
   try {
-    const response = await api.get(`/employee/documents/${documentId}`, {
+    const response = await api.get(`/employee/documents/${documentId}/download`, {
       responseType: 'blob',
     });
     return response.data;
