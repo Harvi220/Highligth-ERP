@@ -5,7 +5,7 @@ export interface Document {
   id: number;
   title: string;
   description: string;
-  status: 'read' | 'unread';
+  status: 'read' | 'unread' | 'assigned';
   created_at?: string;
   updated_at?: string;
   file_path?: string;
@@ -33,7 +33,18 @@ export interface DocumentContentResponse {
 export const getDocuments = async (): Promise<DocumentsResponse> => {
   try {
     const response = await api.get('/employee/documents');
-    return response.data;
+    // API возвращает { data: [...] }, преобразуем в нужную структуру
+    const userData = JSON.parse(localStorage.getItem('user_data') || '{}');
+    return {
+      documents: response.data.data || [],
+      user: {
+        id: userData.id,
+        name: `${userData.last_name} ${userData.first_name}`,
+        position: userData.position?.name,
+        phone: userData.phone,
+        avatar: userData.avatar_url
+      }
+    };
   } catch (error) {
     console.error('Ошибка при получении документов:', error);
     throw error;
