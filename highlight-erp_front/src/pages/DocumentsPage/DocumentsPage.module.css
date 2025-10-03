@@ -11,40 +11,6 @@
   margin: 0 auto;
 }
 
-/* Заголовок пользователя */
-.userHeader {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  margin-bottom: 40px;
-}
-
-.avatar {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  object-fit: cover;
-}
-
-.userInfo {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.userName {
-  font-size: 24px;
-  font-weight: 600;
-  color: #333333;
-  margin: 0;
-}
-
-.userPosition {
-  font-size: 16px;
-  color: #999999;
-  margin: 0;
-}
-
 /* Заголовок страницы */
 .pageTitle {
   font-size: 32px;

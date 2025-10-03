@@ -1,14 +1,14 @@
 // src/pages/DocumentsPage/DocumentsPage.tsx
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { getDocuments, downloadDocument, type Document, type User } from "../../services/documents";
+import { getDocuments, downloadDocument, type Document } from "../../services/documents";
 import EmployeeDocumentCard from "../../components/EmployeeDocumentCard/EmployeeDocumentCard";
+import UserHeader from "../../components/UserHeader";
 import styles from "./DocumentsPage.module.css";
 
 const DocumentsPage = () => {
   const navigate = useNavigate();
   const [documents, setDocuments] = useState<Document[]>([]);
-  const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -24,7 +24,6 @@ const DocumentsPage = () => {
       const data = await getDocuments();
       console.log('Received data:', data);
       setDocuments(data.documents || []);
-      setUser(data.user);
     } catch (err) {
       setError('Ошибка при загрузке документов');
       console.error('Ошибка:', err);
@@ -83,20 +82,7 @@ const DocumentsPage = () => {
   return (
     <div className={styles.page}>
       <div className={styles.container}>
-        {/* Заголовок пользователя */}
-        {user && (
-          <div className={styles.userHeader}>
-            <img
-              src={user.avatar || "https://via.placeholder.com/80x80/4A90E2/FFFFFF?text=" + user.name.slice(0, 2)}
-              alt={user.name}
-              className={styles.avatar}
-            />
-            <div className={styles.userInfo}>
-              <h2 className={styles.userName}>{user.name}</h2>
-              <p className={styles.userPosition}>{user.position || 'Сотрудник'}</p>
-            </div>
-          </div>
-        )}
+        <UserHeader />
 
         {/* Заголовок страницы */}
         <h1 className={styles.pageTitle}>Список документов</h1>

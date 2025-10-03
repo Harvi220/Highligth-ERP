@@ -223,14 +223,14 @@ const EmployeeDetailPage = () => {
             </div>
 
             <div className={styles.formGroup}>
-              <label className={styles.label}>Пароль</label>
+              <label className={styles.label}>Новый пароль</label>
               <div className={styles.passwordField}>
                 <input
                   type={showPassword ? "text" : "password"}
                   className={styles.input}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="***************"
+                  placeholder="Оставьте пустым, чтобы не менять"
                 />
                 <button
                   type="button"
