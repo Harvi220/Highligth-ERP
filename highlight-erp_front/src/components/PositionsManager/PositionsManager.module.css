@@ -1,0 +1,174 @@
+/* src/components/PositionsManager/PositionsManager.module.css */
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.createForm {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.input {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.2s;
+}
+
+.input:focus {
+  outline: none;
+  border-color: #2d3748;
+  box-shadow: 0 0 0 3px rgba(45, 55, 72, 0.1);
+}
+
+.createButton {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background-color: #2d3748;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.createButton:hover:not(:disabled) {
+  background-color: #1a202c;
+}
+
+.createButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.positionsList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.positionItem {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  background-color: #f9fafb;
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+
+.positionItem:hover {
+  background-color: #f3f4f6;
+}
+
+.positionName {
+  flex: 1;
+  font-size: 1rem;
+  color: #1a1a1a;
+}
+
+.actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.editButton,
+.deleteButton,
+.saveButton,
+.cancelButton {
+  padding: 0.5rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.editButton {
+  color: #3b82f6;
+}
+
+.editButton:hover {
+  background: #dbeafe;
+  color: #2563eb;
+}
+
+.deleteButton {
+  color: #ef4444;
+}
+
+.deleteButton:hover {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.saveButton {
+  color: #10b981;
+}
+
+.saveButton:hover {
+  background: #d1fae5;
+  color: #059669;
+}
+
+.saveButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.cancelButton {
+  color: #6b7280;
+}
+
+.cancelButton:hover {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.loading {
+  text-align: center;
+  padding: 2rem;
+  color: #6b7280;
+}
+
+.emptyState {
+  text-align: center;
+  padding: 2rem;
+  color: #9ca3af;
+  font-size: 0.875rem;
+}
+
+/* Адаптивность */
+@media (max-width: 480px) {
+  .createForm {
+    flex-direction: column;
+  }
+
+  .createButton {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .positionItem {
+    padding: 0.75rem;
+  }
+
+  .positionName {
+    font-size: 0.875rem;
+  }
+}

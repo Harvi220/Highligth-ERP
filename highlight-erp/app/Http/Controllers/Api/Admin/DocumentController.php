@@ -80,6 +80,33 @@ class DocumentController extends Controller
     }
 
     /**
+     * @OA\Get(
+     *      path="/api/admin/documents/{document}",
+     *      operationId="showDocument",
+     *      summary="Получение документа по ID",
+     *      tags={"Администратор - Документы"},
+     *      security={{"bearerAuth":{}}},
+     *      @OA\Parameter(
+     *          name="document",
+     *          description="ID документа",
+     *          required=true,
+     *          in="path",
+     *          @OA\Schema(type="integer")
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Успешный ответ",
+     *          @OA\JsonContent(ref="#/components/schemas/Document")
+     *      ),
+     *      @OA\Response(response=404, description="Документ не найден")
+     * )
+     */
+    public function show(Document $document): JsonResponse
+    {
+        return (new DocumentResource($document))->response();
+    }
+
+    /**
      * @OA\Post(
      *      path="/api/admin/documents/{document}",
      *      operationId="updateDocument",

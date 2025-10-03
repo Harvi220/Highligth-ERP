@@ -91,6 +91,12 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::apiResource('documents', DocumentController::class);
 
         /**
+         * Ресурсный контроллер для управления должностями (CRUD).
+         * Создает эндпоинты для создания, чтения, обновления и удаления должностей.
+         */
+        Route::apiResource('positions', \App\Http\Controllers\Api\Admin\PositionController::class)->only(['index', 'store', 'update', 'destroy']);
+
+        /**
          * Эндпоинт для скачивания документа администратором.
          */
         Route::get('documents/{document}/download', [DocumentController::class, 'download']);

@@ -8,6 +8,7 @@ import AdminEmployeesPage from "./pages/AdminEmployeesPage";
 import AdminEmployeeStatsPage from "./pages/AdminEmployeeStatsPage";
 import CreateEmployeePage from "./pages/CreateEmployeePage";
 import CreateDocumentPage from "./pages/CreateDocumentPage";
+import EditDocumentPage from "./pages/EditDocumentPage";
 import EmployeeDetailPage from "./pages/EmployeeDetailPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import "./styles/global.css";
@@ -46,6 +47,14 @@ function App() {
           element={
             <ProtectedRoute requiredRole="admin">
               <CreateDocumentPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/documents/:id/edit"
+          element={
+            <ProtectedRoute requiredRole="admin">
+              <EditDocumentPage />
             </ProtectedRoute>
           }
         />

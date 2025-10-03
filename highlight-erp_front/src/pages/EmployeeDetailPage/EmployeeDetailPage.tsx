@@ -6,6 +6,7 @@ import { getAllDocuments } from "../../services/adminDocuments";
 import { getAllPositions, type Position } from "../../services/adminPositions";
 import type { Employee } from "../../types/employee";
 import type { Document } from "../../types/document";
+import PositionsManager from "../../components/PositionsManager";
 import styles from "./EmployeeDetailPage.module.css";
 
 type Tab = "personal" | "documents";
@@ -17,6 +18,7 @@ const EmployeeDetailPage = () => {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [isPositionsModalOpen, setIsPositionsModalOpen] = useState(false);
 
   // Личные данные
   const [lastName, setLastName] = useState("");
@@ -129,6 +131,15 @@ const EmployeeDetailPage = () => {
     );
   };
 
+  const handlePositionsUpdated = async () => {
+    try {
+      const positionsData = await getAllPositions();
+      setPositions(positionsData);
+    } catch (error) {
+      console.error('Ошибка обновления должностей:', error);
+    }
+  };
+
   if (loading) {
     return (
       <div className={styles.container}>
@@ -198,17 +209,33 @@ const EmployeeDetailPage = () => {
             </div>
 
             <div className={styles.formGroup}>
-              <label className={styles.label}>Должность</label>
-              <select
-                className={styles.input}
-                value={positionId || ''}
-                onChange={(e) => setPositionId(Number(e.target.value))}
-              >
-                <option value="">Выберите должность</option>
-                {positions.map(pos => (
-                  <option key={pos.id} value={pos.id}>{pos.name}</option>
-                ))}
-              </select>
+              <div className={styles.fieldWithButton}>
+                <div className={styles.fieldColumn}>
+                  <label className={styles.label}>Должность</label>
+                  <select
+                    className={styles.input}
+                    value={positionId || ''}
+                    onChange={(e) => setPositionId(Number(e.target.value))}
+                  >
+                    <option value="">Выберите должность</option>
+                    {positions.map(pos => (
+                      <option key={pos.id} value={pos.id}>{pos.name}</option>
+                    ))}
+                  </select>
+                </div>
+                <button
+                  type="button"
+                  className={styles.manageButton}
+                  onClick={() => setIsPositionsModalOpen(true)}
+                  title="Управление должностями"
+                >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="12" y1="8" x2="12" y2="16"/>
+                    <line x1="8" y1="12" x2="16" y2="12"/>
+                  </svg>
+                </button>
+              </div>
             </div>
 
             <div className={styles.formGroup}>
@@ -302,6 +329,12 @@ const EmployeeDetailPage = () => {
           </div>
         </div>
       )}
+
+      <PositionsManager
+        isOpen={isPositionsModalOpen}
+        onClose={() => setIsPositionsModalOpen(false)}
+        onPositionsUpdated={handlePositionsUpdated}
+      />
     </div>
   );
 };

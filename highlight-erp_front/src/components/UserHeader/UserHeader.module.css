@@ -55,6 +55,29 @@
   margin: 0;
 }
 
+.logoutButton {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #ef4444;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 0.5rem;
+}
+
+.logoutButton:hover {
+  color: #dc2626;
+  background: #fef2f2;
+}
+
+.logoutButton:active {
+  transform: scale(0.95);
+}
+
 /* Адаптивность */
 @media (max-width: 480px) {
   .avatar {
