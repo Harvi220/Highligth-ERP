@@ -12,27 +12,33 @@ export const formatPhoneNumber = (value: string): string => {
   // Если пусто, возвращаем пустую строку
   if (!cleaned) return '';
 
-  // Начинаем с +7
-  let formatted = '+7';
-
   // Если первая цифра 7 или 8, пропускаем её
   let digits = cleaned;
   if (cleaned.startsWith('7') || cleaned.startsWith('8')) {
     digits = cleaned.substring(1);
   }
 
+  // Ограничиваем количество цифр до 10
+  digits = digits.substring(0, 10);
+
+  // Начинаем с +7
+  let formatted = '+7';
+
   // Форматируем номер по частям
   if (digits.length > 0) {
-    formatted += ' (' + digits.substring(0, 3);
-  }
-  if (digits.length >= 3) {
-    formatted += ') ' + digits.substring(3, 6);
-  }
-  if (digits.length >= 6) {
-    formatted += '-' + digits.substring(6, 8);
-  }
-  if (digits.length >= 8) {
-    formatted += '-' + digits.substring(8, 10);
+    formatted += ' (' + digits.substring(0, Math.min(3, digits.length));
+
+    if (digits.length >= 3) {
+      formatted += ') ' + digits.substring(3, Math.min(6, digits.length));
+
+      if (digits.length >= 6) {
+        formatted += '-' + digits.substring(6, Math.min(8, digits.length));
+
+        if (digits.length >= 8) {
+          formatted += '-' + digits.substring(8, 10);
+        }
+      }
+    }
   }
 
   return formatted;

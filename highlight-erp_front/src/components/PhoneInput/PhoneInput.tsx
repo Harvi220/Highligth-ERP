@@ -1,6 +1,6 @@
 // Переиспользуемый компонент инпута телефона с маской
 
-import React, { useRef, useEffect } from 'react';
+import React, { useRef } from 'react';
 import { formatPhoneNumber, getPhonePlaceholder } from '../../utils/phoneUtils';
 import styles from './PhoneInput.module.css';
 
@@ -24,28 +24,44 @@ const PhoneInput: React.FC<PhoneInputProps> = ({
   disabled = false,
 }) => {
   const inputRef = useRef<HTMLInputElement>(null);
-  const previousValue = useRef<string>(value);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = e.target.value;
+    const input = e.target;
+    const newValue = input.value;
+    const cursorPosition = input.selectionStart || 0;
+
+    // Сохраняем количество цифр до курсора для восстановления позиции
+    const digitsBeforeCursor = newValue.substring(0, cursorPosition).replace(/\D/g, '').length;
+
     const formatted = formatPhoneNumber(newValue);
-
-    previousValue.current = formatted;
     onChange(formatted);
-  };
 
-  // Устанавливаем курсор в правильную позицию после форматирования
-  useEffect(() => {
-    if (inputRef.current && value !== previousValue.current) {
-      const input = inputRef.current;
-      const selectionStart = input.selectionStart || 0;
+    // Восстанавливаем позицию курсора после форматирования
+    requestAnimationFrame(() => {
+      if (inputRef.current) {
+        let newCursorPosition = 0;
+        let digitCount = 0;
 
-      // Если курсор в конце, оставляем его там
-      if (selectionStart >= previousValue.current.length) {
-        input.setSelectionRange(value.length, value.length);
+        // Находим позицию курсора, учитывая количество цифр
+        for (let i = 0; i < formatted.length; i++) {
+          if (/\d/.test(formatted[i])) {
+            digitCount++;
+            if (digitCount >= digitsBeforeCursor) {
+              newCursorPosition = i + 1;
+              break;
+            }
+          }
+        }
+
+        // Если не нашли позицию, ставим в конец
+        if (newCursorPosition === 0) {
+          newCursorPosition = formatted.length;
+        }
+
+        inputRef.current.setSelectionRange(newCursorPosition, newCursorPosition);
       }
-    }
-  }, [value]);
+    });
+  };
 
   return (
     <div className={styles.formGroup}>

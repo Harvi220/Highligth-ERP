@@ -14,67 +14,43 @@
   border-radius: 16px;
   padding: 40px;
   width: 100%;
-  max-width: 400px;
+  max-width: 450px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0 0 2rem 0;
+  text-align: center;
 }
 
 .form {
   display: flex;
   flex-direction: column;
-  gap: 24px;
-}
-
-.inputGroup {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.label {
-  font-size: 16px;
-  font-weight: 500;
-  color: #333333;
-}
-
-.input {
-  padding: 16px;
-  border: 1px solid #e5e5e5;
-  border-radius: 8px;
-  font-size: 16px;
-  background-color: #ffffff;
-  color: #333333;
-  transition: border-color 0.2s ease;
-}
-
-.input::placeholder {
-  color: #999999;
-}
-
-.input:focus {
-  outline: none;
-  border-color: #007bff;
-  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+  gap: 1.5rem;
 }
 
 .submitButton {
-  background-color: #333333;
+  background-color: #2d3748;
   color: #ffffff;
   border: none;
-  border-radius: 8px;
-  padding: 16px;
-  font-size: 16px;
-  font-weight: 500;
+  border-radius: 0.75rem;
+  padding: 1rem 1.5rem;
+  font-size: 1.125rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: opacity 0.2s ease;
-  margin-top: 8px;
+  transition: all 0.2s ease;
+  margin-top: 0.5rem;
 }
 
-.submitButton:hover {
-  opacity: 0.9;
+.submitButton:hover:not(:disabled) {
+  background-color: #1a202c;
 }
 
-.submitButton:active {
-  opacity: 0.8;
+.submitButton:active:not(:disabled) {
+  transform: scale(0.98);
 }
 
 .submitButton:disabled {
@@ -83,11 +59,33 @@
 }
 
 .errorMessage {
-  background-color: #fee;
-  border: 1px solid #fcc;
-  border-radius: 4px;
-  color: #c33;
-  padding: 12px;
-  font-size: 14px;
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 0.5rem;
+  color: #dc2626;
+  padding: 0.875rem 1rem;
+  font-size: 0.875rem;
   text-align: center;
+  font-weight: 500;
+}
+
+/* Адаптивность */
+@media (max-width: 480px) {
+  .loginCard {
+    padding: 2rem 1.5rem;
+  }
+
+  .title {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .form {
+    gap: 1.25rem;
+  }
+
+  .submitButton {
+    font-size: 1rem;
+    padding: 0.875rem 1.25rem;
+  }
 }

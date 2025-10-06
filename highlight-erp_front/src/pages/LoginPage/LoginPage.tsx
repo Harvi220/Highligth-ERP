@@ -2,6 +2,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { login } from "../../services/auth";
+import { validatePhone, validatePassword } from "../../utils/validators";
+import { cleanPhoneNumber } from "../../utils/phoneUtils";
+import PhoneInput from "../../components/PhoneInput/PhoneInput";
+import PasswordInput from "../../components/PasswordInput/PasswordInput";
 import styles from "./LoginPage.module.css";
 
 const LoginPage = () => {
@@ -9,13 +13,46 @@ const LoginPage = () => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [touched, setTouched] = useState<Record<string, boolean>>({});
   const navigate = useNavigate();
+
+  const validateField = (fieldName: string, value: string) => {
+    let fieldError = '';
+
+    if (fieldName === 'phone') {
+      fieldError = validatePhone(value) || '';
+    } else if (fieldName === 'password') {
+      fieldError = validatePassword(value, false) || '';
+    }
+
+    setErrors(prev => ({
+      ...prev,
+      [fieldName]: fieldError
+    }));
+  };
+
+  const handleBlur = (fieldName: string) => {
+    setTouched(prev => ({ ...prev, [fieldName]: true }));
+    validateField(fieldName, fieldName === 'phone' ? phone : password);
+  };
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
-    if (!phone || !password) {
-      setError("Пожалуйста, заполните все поля");
+    // Отмечаем все поля как touched
+    setTouched({ phone: true, password: true });
+
+    // Валидация
+    const phoneError = validatePhone(phone);
+    const passwordError = validatePassword(password, false);
+
+    setErrors({
+      phone: phoneError || '',
+      password: passwordError || ''
+    });
+
+    if (phoneError || passwordError) {
       return;
     }
 
@@ -23,7 +60,10 @@ const LoginPage = () => {
       setLoading(true);
       setError(null);
 
-      const response = await login({ phone, password });
+      // Очищаем телефон от нецифровых символов
+      const cleanedPhone = cleanPhoneNumber(phone);
+
+      const response = await login({ phone: cleanedPhone, password });
 
       // Перенаправляем в зависимости от роли пользователя
       if (response.user.role?.name === "admin") {
@@ -42,31 +82,40 @@ const LoginPage = () => {
     }
   };
 
+  const hasErrors = errors.phone || errors.password;
+  const isFormValid = phone && password && !hasErrors;
+
   return (
     <div className={styles.page}>
       <div className={styles.loginCard}>
-        <form onSubmit={handleSubmit} className={styles.form}>
-          <div className={styles.inputGroup}>
-            <label className={styles.label}>Номер телефона</label>
-            <input
-              type="tel"
-              placeholder="Value"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              className={styles.input}
-            />
-          </div>
+        <h1 className={styles.title}>Вход в систему</h1>
 
-          <div className={styles.inputGroup}>
-            <label className={styles.label}>Пароль</label>
-            <input
-              type="password"
-              placeholder="Value"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className={styles.input}
-            />
-          </div>
+        <form onSubmit={handleSubmit} className={styles.form}>
+          <PhoneInput
+            label="Номер телефона"
+            name="phone"
+            value={phone}
+            onChange={(value) => {
+              setPhone(value);
+              if (touched.phone) validateField('phone', value);
+            }}
+            error={touched.phone ? errors.phone : ''}
+            required
+            autoComplete="tel"
+          />
+
+          <PasswordInput
+            label="Пароль"
+            name="password"
+            value={password}
+            onChange={(value) => {
+              setPassword(value);
+              if (touched.password) validateField('password', value);
+            }}
+            error={touched.password ? errors.password : ''}
+            required
+            autoComplete="current-password"
+          />
 
           {error && (
             <div className={styles.errorMessage}>
@@ -74,7 +123,11 @@ const LoginPage = () => {
             </div>
           )}
 
-          <button type="submit" className={styles.submitButton} disabled={loading}>
+          <button
+            type="submit"
+            className={styles.submitButton}
+            disabled={loading || !isFormValid}
+          >
             {loading ? "Вход..." : "Войти"}
           </button>
         </form>

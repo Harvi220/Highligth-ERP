@@ -4,7 +4,10 @@ import { useNavigate } from "react-router-dom";
 import { createEmployee } from "../../services/adminEmployees";
 import { getAllDocuments } from "../../services/adminDocuments";
 import { getAllPositions, type Position } from "../../services/adminPositions";
-import { validateEmployeeForm, type EmployeeFormData } from "../../utils/validators";
+import {
+  validateEmployeeForm,
+  type EmployeeFormData,
+} from "../../utils/validators";
 import { cleanPhoneNumber, formatPhoneNumber } from "../../utils/phoneUtils";
 import type { Document } from "../../types/document";
 import FormInput from "../../components/FormInput/FormInput";
@@ -47,12 +50,12 @@ const CreateEmployeePage = () => {
     try {
       const [positionsData, documentsData] = await Promise.all([
         getAllPositions(),
-        getAllDocuments()
+        getAllDocuments(),
       ]);
       setPositions(positionsData);
       setDocuments(documentsData);
     } catch (error) {
-      console.error('Ошибка загрузки данных:', error);
+      console.error("Ошибка загрузки данных:", error);
     }
   };
 
@@ -61,7 +64,7 @@ const CreateEmployeePage = () => {
       const positionsData = await getAllPositions();
       setPositions(positionsData);
     } catch (error) {
-      console.error('Ошибка обновления должностей:', error);
+      console.error("Ошибка обновления должностей:", error);
     }
   };
 
@@ -74,7 +77,7 @@ const CreateEmployeePage = () => {
       phone,
       password,
       positionId,
-      isEdit: false
+      isEdit: false,
     };
 
     const validationErrors = validateEmployeeForm(formData);
@@ -87,7 +90,7 @@ const CreateEmployeePage = () => {
       patronymic: true,
       phone: true,
       password: true,
-      position: true
+      position: true,
     });
 
     return Object.keys(validationErrors).length === 0;
@@ -102,14 +105,14 @@ const CreateEmployeePage = () => {
       phone,
       password,
       positionId,
-      isEdit: false
+      isEdit: false,
     };
 
     const validationErrors = validateEmployeeForm(formData);
 
-    setErrors(prev => ({
+    setErrors((prev) => ({
       ...prev,
-      [fieldName]: validationErrors[fieldName] || ''
+      [fieldName]: validationErrors[fieldName] || "",
     }));
   };
 
@@ -126,9 +129,9 @@ const CreateEmployeePage = () => {
   };
 
   const toggleDocument = (docId: number) => {
-    setSelectedDocuments(prev =>
+    setSelectedDocuments((prev) =>
       prev.includes(docId)
-        ? prev.filter(id => id !== docId)
+        ? prev.filter((id) => id !== docId)
         : [...prev, docId]
     );
   };
@@ -154,13 +157,14 @@ const CreateEmployeePage = () => {
         phone: cleanedPhone,
         password,
         position_id: positionId,
-        documents: selectedDocuments
+        documents: selectedDocuments,
       });
 
-      navigate('/admin/employees');
+      navigate("/admin/employees");
     } catch (error: any) {
-      console.error('Ошибка создания сотрудника:', error);
-      const errorMessage = error?.response?.data?.message || 'Ошибка при создании сотрудника';
+      console.error("Ошибка создания сотрудника:", error);
+      const errorMessage =
+        error?.response?.data?.message || "Ошибка при создании сотрудника";
       alert(errorMessage);
     } finally {
       setLoading(false);
@@ -168,14 +172,35 @@ const CreateEmployeePage = () => {
   };
 
   // Проверка, заполнены ли все обязательные поля для кнопки "Далее"
-  const hasStep1Errors = errors.lastName || errors.firstName || errors.patronymic || errors.phone || errors.password || errors.position;
-  const isStep1Valid = lastName.trim() && firstName.trim() && positionId && phone && password && !hasStep1Errors;
+  const hasStep1Errors =
+    errors.lastName ||
+    errors.firstName ||
+    errors.patronymic ||
+    errors.phone ||
+    errors.password ||
+    errors.position;
+  const isStep1Valid =
+    lastName.trim() &&
+    firstName.trim() &&
+    positionId &&
+    phone &&
+    password &&
+    !hasStep1Errors;
 
   return (
     <div className={styles.container}>
-      <button className={styles.backButton} onClick={() => navigate('/admin/employees')}>
+      <button
+        className={styles.backButton}
+        onClick={() => navigate("/admin/employees")}
+      >
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-          <path d="M19 12H5M5 12L12 19M5 12L12 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          <path
+            d="M19 12H5M5 12L12 19M5 12L12 5"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
         </svg>
         Назад
       </button>
@@ -191,9 +216,9 @@ const CreateEmployeePage = () => {
               value={lastName}
               onChange={(value) => {
                 setLastName(value);
-                if (touched.lastName) validateField('lastName');
+                if (touched.lastName) validateField("lastName");
               }}
-              error={touched.lastName ? errors.lastName : ''}
+              error={touched.lastName ? errors.lastName : ""}
               placeholder="Иванов"
               required
               maxLength={255}
@@ -206,9 +231,9 @@ const CreateEmployeePage = () => {
               value={firstName}
               onChange={(value) => {
                 setFirstName(value);
-                if (touched.firstName) validateField('firstName');
+                if (touched.firstName) validateField("firstName");
               }}
-              error={touched.firstName ? errors.firstName : ''}
+              error={touched.firstName ? errors.firstName : ""}
               placeholder="Иван"
               required
               maxLength={255}
@@ -221,9 +246,9 @@ const CreateEmployeePage = () => {
               value={patronymic}
               onChange={(value) => {
                 setPatronymic(value);
-                if (touched.patronymic) validateField('patronymic');
+                if (touched.patronymic) validateField("patronymic");
               }}
-              error={touched.patronymic ? errors.patronymic : ''}
+              error={touched.patronymic ? errors.patronymic : ""}
               placeholder="Иванович"
               maxLength={255}
               autoComplete="additional-name"
@@ -234,13 +259,16 @@ const CreateEmployeePage = () => {
                 <FormSelect
                   label="Должность"
                   name="position"
-                  value={positionId || ''}
+                  value={positionId || ""}
                   onChange={(value) => {
                     setPositionId(value ? Number(value) : null);
-                    if (touched.position) validateField('position');
+                    if (touched.position) validateField("position");
                   }}
-                  options={positions.map(pos => ({ value: pos.id, label: pos.name }))}
-                  error={touched.position ? errors.position : ''}
+                  options={positions.map((pos) => ({
+                    value: pos.id,
+                    label: pos.name,
+                  }))}
+                  error={touched.position ? errors.position : ""}
                   placeholder="Выберите должность"
                   required
                 />
@@ -251,10 +279,17 @@ const CreateEmployeePage = () => {
                 onClick={() => setIsPositionsModalOpen(true)}
                 title="Управление должностями"
               >
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <circle cx="12" cy="12" r="10"/>
-                  <line x1="12" y1="8" x2="12" y2="16"/>
-                  <line x1="8" y1="12" x2="16" y2="12"/>
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                >
+                  <circle cx="12" cy="12" r="10" />
+                  <line x1="12" y1="8" x2="12" y2="16" />
+                  <line x1="8" y1="12" x2="16" y2="12" />
                 </svg>
               </button>
             </div>
@@ -265,9 +300,9 @@ const CreateEmployeePage = () => {
               value={phone}
               onChange={(value) => {
                 setPhone(value);
-                if (touched.phone) validateField('phone');
+                if (touched.phone) validateField("phone");
               }}
-              error={touched.phone ? errors.phone : ''}
+              error={touched.phone ? errors.phone : ""}
               required
             />
 
@@ -277,9 +312,9 @@ const CreateEmployeePage = () => {
               value={password}
               onChange={(value) => {
                 setPassword(value);
-                if (touched.password) validateField('password');
+                if (touched.password) validateField("password");
               }}
-              error={touched.password ? errors.password : ''}
+              error={touched.password ? errors.password : ""}
               placeholder="Минимум 8 символов"
               required
               autoComplete="new-password"
@@ -301,17 +336,25 @@ const CreateEmployeePage = () => {
           <h1 className={styles.title}>Документы</h1>
 
           <div className={styles.documentsList}>
-            {documents.map(doc => (
+            {documents.map((doc) => (
               <div
                 key={doc.id}
                 className={styles.documentItem}
                 onClick={() => toggleDocument(doc.id)}
               >
                 <span className={styles.documentName}>{doc.title}</span>
-                <div className={`${styles.checkbox} ${selectedDocuments.includes(doc.id) ? styles.checked : ''}`}>
+                <div
+                  className={`${styles.checkbox} ${selectedDocuments.includes(doc.id) ? styles.checked : ""}`}
+                >
                   {selectedDocuments.includes(doc.id) && (
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                      <path d="M5 12L10 17L20 7" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path
+                        d="M5 12L10 17L20 7"
+                        stroke="white"
+                        strokeWidth="3"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
                     </svg>
                   )}
                 </div>
@@ -324,7 +367,7 @@ const CreateEmployeePage = () => {
             onClick={handleSubmit}
             disabled={loading}
           >
-            {loading ? 'Создание...' : 'Создать'}
+            {loading ? "Создание..." : "Создать"}
           </button>
         </div>
       )}
