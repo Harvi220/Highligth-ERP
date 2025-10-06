@@ -2,6 +2,23 @@
 import api from './api';
 import type { Document, AdminDocumentsResponse, AdminDocumentResponse } from '../types/document';
 
+export interface User {
+  id: number;
+  name: string;
+  position: string | null;
+  phone: string;
+  avatar: string | null;
+}
+
+export interface DocumentContentResponse {
+  document: Document;
+  file_url: string;
+  file_name: string;
+  file_size: number;
+  mime_type: string;
+  user: User;
+}
+
 // Получение списка всех документов (admin)
 export const getAllDocuments = async (): Promise<Document[]> => {
   try {
@@ -92,6 +109,17 @@ export const downloadDocument = async (id: number, filename: string): Promise<vo
     window.URL.revokeObjectURL(url);
   } catch (error) {
     console.error('Ошибка при скачивании документа:', error);
+    throw error;
+  }
+};
+
+// Получение содержимого документа для просмотра (admin)
+export const getDocumentContent = async (id: number): Promise<DocumentContentResponse> => {
+  try {
+    const response = await api.get<DocumentContentResponse>(`/admin/documents/${id}/content`);
+    return response.data;
+  } catch (error) {
+    console.error('Ошибка при получении содержимого документа:', error);
     throw error;
   }
 };

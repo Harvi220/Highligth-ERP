@@ -97,6 +97,11 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::apiResource('positions', \App\Http\Controllers\Api\Admin\PositionController::class)->only(['index', 'store', 'update', 'destroy']);
 
         /**
+         * Эндпоинт для получения содержимого документа для просмотра администратором.
+         */
+        Route::get('documents/{document}/content', [DocumentController::class, 'content']);
+
+        /**
          * Эндпоинт для скачивания документа администратором.
          */
         Route::get('documents/{document}/download', [DocumentController::class, 'download']);

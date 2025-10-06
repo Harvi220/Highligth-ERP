@@ -41,22 +41,21 @@ const EmployeeStatCard = ({ employee }: EmployeeStatCardProps) => {
 
         <div className={styles.actions}>
           <div className={styles.stats}>
-            {readDocuments.map((_, index) => (
-              <div key={`read-${index}`} className={`${styles.icon} ${styles.iconRead}`}>
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                  <circle cx="12" cy="12" r="10" fill="#10b981"/>
-                  <path d="M9 12L11 14L15 10" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              </div>
-            ))}
-            {unreadDocuments.map((_, index) => (
-              <div key={`unread-${index}`} className={`${styles.icon} ${styles.iconUnread}`}>
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                  <circle cx="12" cy="12" r="10" fill="#ef4444"/>
-                  <path d="M9 9L15 15M15 9L9 15" stroke="white" strokeWidth="2" strokeLinecap="round"/>
-                </svg>
-              </div>
-            ))}
+            <div className={styles.statItem}>
+              <span className={styles.statCount} style={{ color: '#10b981' }}>{readDocuments.length}</span>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <circle cx="12" cy="12" r="10" fill="#10b981"/>
+                <path d="M9 12L11 14L15 10" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </div>
+
+            <div className={styles.statItem}>
+              <span className={styles.statCount} style={{ color: '#ef4444' }}>{unreadDocuments.length}</span>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <circle cx="12" cy="12" r="10" fill="#ef4444"/>
+                <path d="M9 9L15 15M15 9L9 15" stroke="white" strokeWidth="2" strokeLinecap="round"/>
+              </svg>
+            </div>
           </div>
 
           <button className={styles.expandButton}>

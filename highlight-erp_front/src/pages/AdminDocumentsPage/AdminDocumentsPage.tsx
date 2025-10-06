@@ -7,6 +7,7 @@ import UserHeader from "../../components/UserHeader";
 import PageHeader from "../../components/PageHeader";
 import DocumentCard from "../../components/DocumentCard";
 import AdminBottomNav from "../../components/AdminBottomNav";
+import ConfirmDialog from "../../components/ConfirmDialog/ConfirmDialog";
 import styles from "./AdminDocumentsPage.module.css";
 
 const AdminDocumentsPage = () => {
@@ -15,6 +16,10 @@ const AdminDocumentsPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [deleteDocumentId, setDeleteDocumentId] = useState<number | null>(null);
+  const [deleteDocumentTitle, setDeleteDocumentTitle] = useState<string>("");
+  const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
     loadDocuments();
@@ -34,17 +39,27 @@ const AdminDocumentsPage = () => {
     }
   };
 
-  const handleDelete = async (id: number, title: string) => {
-    if (!confirm(`Вы уверены, что хотите удалить документ "${title}"?`)) {
-      return;
-    }
+  const handleDeleteClick = (id: number, title: string) => {
+    setDeleteDocumentId(id);
+    setDeleteDocumentTitle(title);
+    setIsDeleteDialogOpen(true);
+  };
 
+  const handleDeleteConfirm = async () => {
+    if (!deleteDocumentId) return;
+
+    setDeleting(true);
     try {
-      await deleteDocument(id);
-      setDocuments(documents.filter(doc => doc.id !== id));
+      await deleteDocument(deleteDocumentId);
+      setDocuments(documents.filter(doc => doc.id !== deleteDocumentId));
+      setIsDeleteDialogOpen(false);
+      setDeleteDocumentId(null);
+      setDeleteDocumentTitle("");
     } catch (err) {
       console.error('Ошибка при удалении:', err);
       alert('Ошибка при удалении документа');
+    } finally {
+      setDeleting(false);
     }
   };
 
@@ -128,7 +143,8 @@ const AdminDocumentsPage = () => {
                 document={document}
                 onDownload={handleDownload}
                 onEdit={handleEdit}
-                onDelete={handleDelete}
+                onDelete={handleDeleteClick}
+                onView={handleView}
               />
             ))}
           </div>
@@ -148,6 +164,15 @@ const AdminDocumentsPage = () => {
       </div>
 
       <AdminBottomNav />
+
+      <ConfirmDialog
+        isOpen={isDeleteDialogOpen}
+        onClose={() => setIsDeleteDialogOpen(false)}
+        onConfirm={handleDeleteConfirm}
+        title="Удаление документа"
+        message={`Вы действительно хотите удалить документ «${deleteDocumentTitle}»`}
+        isLoading={deleting}
+      />
     </div>
   );
 };

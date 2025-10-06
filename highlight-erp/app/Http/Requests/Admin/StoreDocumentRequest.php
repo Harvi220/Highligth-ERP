@@ -23,14 +23,23 @@ class StoreDocumentRequest extends FormRequest
     {
         return [
             'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
+            'description' => 'nullable|string|max:5000',
             'file' => [
                 'required',
                 'file',
                 'mimes:pdf,docx,xlsx',
-                'max:10240',
+                'max:10240', // 10MB
             ],
             'is_for_all_employees' => 'nullable|boolean',
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'file.mimes' => 'Файл должен быть в формате PDF, DOCX или XLSX',
+            'file.max' => 'Размер файла не должен превышать 10 МБ',
+            'description.max' => 'Описание не должно превышать 5000 символов',
         ];
     }
 

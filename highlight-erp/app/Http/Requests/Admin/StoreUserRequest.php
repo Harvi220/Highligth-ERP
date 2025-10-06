@@ -47,11 +47,21 @@ class StoreUserRequest extends FormRequest
             'last_name'  => ['required', 'string','max:255'],
             'first_name' => ['required', 'string','max:255'],
             'patronymic' => ['nullable', 'string', 'max:255'],
-            'position_id' => ['required', 'integer', 'exists:positions,id', ],
-            'phone' => 'required|string|unique:users,phone',
+            'position_id' => ['required', 'integer', 'exists:positions,id'],
+            'phone' => ['required', 'string', 'regex:/^7\d{10}$/', 'unique:users,phone'],
             'password' => ['required', 'string', Password::min(8)],
             'documents' => ['nullable', 'array'],
             'documents.*' => ['integer', 'exists:documents,id'],
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'phone.regex' => 'Номер телефона должен быть в формате 7XXXXXXXXXX (11 цифр, начинается с 7)',
+            'phone.unique' => 'Пользователь с таким номером телефона уже существует',
+            'position_id.exists' => 'Выбранная должность не существует',
+            'documents.*.exists' => 'Один или несколько выбранных документов не существуют',
         ];
     }
 }

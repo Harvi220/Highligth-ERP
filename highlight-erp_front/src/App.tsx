@@ -4,6 +4,7 @@ import { LoginPage } from "./pages/LoginPage";
 import { DocumentsPage } from "./pages/DocumentsPage";
 import { DocumentViewPage } from "./pages/DocumentViewPage";
 import AdminDocumentsPage from "./pages/AdminDocumentsPage";
+import AdminDocumentViewPage from "./pages/AdminDocumentViewPage/AdminDocumentViewPage";
 import AdminEmployeesPage from "./pages/AdminEmployeesPage";
 import AdminEmployeeStatsPage from "./pages/AdminEmployeeStatsPage";
 import CreateEmployeePage from "./pages/CreateEmployeePage";
@@ -55,6 +56,14 @@ function App() {
           element={
             <ProtectedRoute requiredRole="admin">
               <EditDocumentPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/documents/:id"
+          element={
+            <ProtectedRoute requiredRole="admin">
+              <AdminDocumentViewPage />
             </ProtectedRoute>
           }
         />

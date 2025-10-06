@@ -7,11 +7,25 @@ interface DocumentCardProps {
   onDownload: (id: number, filename: string) => void;
   onEdit: (id: number) => void;
   onDelete: (id: number, title: string) => void;
+  onView?: (id: number) => void;
 }
 
-const DocumentCard = ({ document, onDownload, onEdit, onDelete }: DocumentCardProps) => {
+const DocumentCard = ({ document, onDownload, onEdit, onDelete, onView }: DocumentCardProps) => {
+  const handleCardClick = (e: React.MouseEvent) => {
+    // Не вызываем onView если клик был на кнопках
+    const target = e.target as HTMLElement;
+    if (target.closest('button')) {
+      return;
+    }
+    onView?.(document.id);
+  };
+
   return (
-    <div className={styles.documentCard}>
+    <div
+      className={styles.documentCard}
+      onClick={handleCardClick}
+      style={{ cursor: onView ? 'pointer' : 'default' }}
+    >
       <button
         className={styles.downloadButton}
         onClick={() => onDownload(document.id, document.original_filename)}

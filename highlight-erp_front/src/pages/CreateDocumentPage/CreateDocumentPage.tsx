@@ -2,6 +2,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { createDocument } from "../../services/adminDocuments";
+import { validateDocumentForm, type DocumentFormData } from "../../utils/validators";
+import FormInput from "../../components/FormInput/FormInput";
+import FormTextarea from "../../components/FormTextarea/FormTextarea";
+import FileInput from "../../components/FileInput/FileInput";
 import styles from "./CreateDocumentPage.module.css";
 
 const CreateDocumentPage = () => {
@@ -11,32 +15,60 @@ const CreateDocumentPage = () => {
   const [description, setDescription] = useState("");
   const [useForAll, setUseForAll] = useState(false);
   const [file, setFile] = useState<File | null>(null);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [touched, setTouched] = useState<Record<string, boolean>>({});
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      setFile(e.target.files[0]);
-    }
+  // Валидация формы
+  const validateForm = (): boolean => {
+    const formData: DocumentFormData = {
+      title,
+      description,
+      file
+    };
+
+    const validationErrors = validateDocumentForm(formData);
+    setErrors(validationErrors);
+
+    // Отмечаем все поля как touched при попытке отправки
+    setTouched({ title: true, description: true, file: true });
+
+    return Object.keys(validationErrors).length === 0;
+  };
+
+  // Валидация отдельного поля
+  const validateField = (fieldName: keyof DocumentFormData) => {
+    const formData: DocumentFormData = {
+      title,
+      description,
+      file
+    };
+
+    const validationErrors = validateDocumentForm(formData);
+
+    setErrors(prev => ({
+      ...prev,
+      [fieldName]: validationErrors[fieldName] || ''
+    }));
+  };
+
+  const handleBlur = (fieldName: keyof DocumentFormData) => {
+    setTouched(prev => ({ ...prev, [fieldName]: true }));
+    validateField(fieldName);
   };
 
   const handleSubmit = async () => {
-    if (!title.trim()) {
-      alert('Введите название документа');
-      return;
-    }
-
-    if (!file) {
-      alert('Выберите файл для загрузки');
+    if (!validateForm()) {
       return;
     }
 
     setLoading(true);
     try {
       const formData = new FormData();
-      formData.append('title', title);
-      if (description) {
-        formData.append('description', description);
+      formData.append('title', title.trim());
+      if (description.trim()) {
+        formData.append('description', description.trim());
       }
-      formData.append('file', file);
+      formData.append('file', file!);
       formData.append('is_for_all_employees', useForAll ? '1' : '0');
 
       await createDocument(formData);
@@ -51,6 +83,10 @@ const CreateDocumentPage = () => {
     }
   };
 
+  // Проверка, можно ли отправить форму
+  const hasErrors = errors.title || errors.description || errors.file;
+  const isFormValid = title.trim() && file && !hasErrors;
+
   return (
     <div className={styles.container}>
       <button className={styles.backButton} onClick={() => navigate('/admin/documents')}>
@@ -63,27 +99,34 @@ const CreateDocumentPage = () => {
       <h1 className={styles.title}>Создание документа</h1>
 
       <div className={styles.form}>
-        <div className={styles.formGroup}>
-          <label className={styles.label}>Название документа</label>
-          <input
-            type="text"
-            className={styles.input}
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            placeholder="Введите название..."
-          />
-        </div>
+        <FormInput
+          label="Название документа"
+          name="title"
+          value={title}
+          onChange={(value) => {
+            setTitle(value);
+            if (touched.title) validateField('title');
+          }}
+          error={touched.title ? errors.title : ''}
+          placeholder="Введите название документа"
+          required
+          maxLength={255}
+          autoComplete="off"
+        />
 
-        <div className={styles.formGroup}>
-          <label className={styles.label}>Описание</label>
-          <textarea
-            className={styles.textarea}
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            placeholder="Введите описание..."
-            rows={4}
-          />
-        </div>
+        <FormTextarea
+          label="Описание"
+          name="description"
+          value={description}
+          onChange={(value) => {
+            setDescription(value);
+            if (touched.description) validateField('description');
+          }}
+          error={touched.description ? errors.description : ''}
+          placeholder="Опишите содержание и назначение документа"
+          rows={4}
+          maxLength={5000}
+        />
 
         <div className={styles.checkboxGroup}>
           <label className={styles.checkboxLabel}>
@@ -100,30 +143,28 @@ const CreateDocumentPage = () => {
           </p>
         </div>
 
-        <div className={styles.fileUploadGroup}>
-          <input
-            type="file"
-            id="file-upload"
-            className={styles.fileInput}
-            onChange={handleFileChange}
-            accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
-          />
-          <label htmlFor="file-upload" className={styles.fileUploadButton}>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-              <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M17 8L12 3L7 8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M12 3V15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-            Загрузить файл
-          </label>
-          {file && <p className={styles.fileName}>{file.name}</p>}
-        </div>
+        <FileInput
+          label="Файл документа"
+          name="file"
+          file={file}
+          onChange={(selectedFile) => {
+            setFile(selectedFile);
+            if (touched.file) {
+              setTouched(prev => ({ ...prev, file: true }));
+              validateField('file');
+            }
+          }}
+          error={touched.file ? errors.file : ''}
+          accept=".pdf,.docx,.xlsx"
+          required
+          helpText="Допустимые форматы: PDF, DOCX, XLSX. Максимальный размер: 10 МБ"
+        />
       </div>
 
       <button
         className={styles.createButton}
         onClick={handleSubmit}
-        disabled={loading}
+        disabled={loading || !isFormValid}
       >
         {loading ? 'Создание...' : 'Создать'}
       </button>

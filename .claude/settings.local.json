@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(test:*)",
+      "Bash(\"/c/Program Files/LibreOffice/program/soffice.exe\" --version)",
+      "Bash(powershell.exe:*)",
+      "Bash(npm install:*)",
+      "Bash(php:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

@@ -173,6 +173,58 @@ class DocumentController extends Controller
 
     /**
      * @OA\Get(
+     *      path="/api/admin/documents/{document}/content",
+     *      operationId="getAdminDocumentContent",
+     *      summary="Получение содержимого документа для просмотра администратором",
+     *      tags={"Администратор - Документы"},
+     *      security={{"bearerAuth":{}}},
+     *      @OA\Parameter(name="document", in="path", required=true, @OA\Schema(type="integer")),
+     *      @OA\Response(response=200, description="Успешный ответ"),
+     *      @OA\Response(response=404, description="Документ не найден или файл отсутствует")
+     * )
+     */
+    public function content(Document $document): JsonResponse
+    {
+        // Используем PDF версию если доступна, иначе оригинальный файл
+        $filePath = $document->pdf_file_path ?? $document->file_path;
+        $fileName = $document->pdf_file_path
+            ? pathinfo($document->original_filename, PATHINFO_FILENAME) . '.pdf'
+            : $document->original_filename;
+
+        // Проверяем наличие файла
+        if (!$filePath || !\Illuminate\Support\Facades\Storage::disk('public')->exists($filePath)) {
+            return response()->json(['message' => 'Файл документа не найден.'], 404);
+        }
+
+        // Добавляем флаг наличия PDF версии
+        $document->has_pdf = !empty($document->pdf_file_path);
+
+        // Получаем текущего администратора для ответа
+        $user = \Illuminate\Support\Facades\Auth::user();
+        $responseUser = [
+            'id' => $user->id,
+            'name' => $user->first_name . ' ' . $user->last_name,
+            'position' => $user->position->name ?? null,
+            'phone' => $user->phone,
+            'avatar' => $user->avatar_url ?? null,
+        ];
+
+        // Используем API endpoint вместо прямого URL для избежания CORS проблем
+        $fileUrl = url("/api/admin/documents/{$document->id}/download");
+
+        // Возвращаем документ и его содержимое
+        return response()->json([
+            'document' => new DocumentResource($document),
+            'file_url' => $fileUrl,
+            'file_name' => $fileName,
+            'file_size' => \Illuminate\Support\Facades\Storage::disk('public')->size($filePath),
+            'mime_type' => \Illuminate\Support\Facades\Storage::disk('public')->mimeType($filePath),
+            'user' => $responseUser
+        ]);
+    }
+
+    /**
+     * @OA\Get(
      *      path="/api/admin/documents/{document}/download",
      *      operationId="downloadDocument",
      *      summary="Скачивание документа",

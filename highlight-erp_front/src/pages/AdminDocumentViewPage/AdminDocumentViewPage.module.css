@@ -1,0 +1,124 @@
+/* src/pages/AdminDocumentViewPage/AdminDocumentViewPage.module.css */
+
+.page {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+  padding: 20px;
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* Заголовок документа */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 32px;
+  border-bottom: 1px solid #e5e5e5;
+  background: white;
+  gap: 16px;
+}
+
+.title {
+  flex: 1;
+  font-size: 20px;
+  font-weight: 600;
+  color: #333333;
+  margin: 0;
+  text-align: center;
+}
+
+.backButton {
+  background-color: transparent;
+  color: #333;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.backButton:hover {
+  background-color: #f5f5f5;
+  border-color: #d5d5d5;
+}
+
+.downloadButton {
+  background-color: #333;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.downloadButton:hover {
+  background-color: #222;
+}
+
+/* Контейнер для PDF viewer */
+.viewerContainer {
+  background: #f5f5f5;
+  min-height: 500px;
+}
+
+/* Состояния загрузки и ошибок */
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  font-size: 18px;
+  color: #666666;
+}
+
+.error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  min-height: 200px;
+  justify-content: center;
+  font-size: 16px;
+  color: #dc3545;
+  text-align: center;
+  padding: 32px;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .page {
+    padding: 16px;
+  }
+
+  .header {
+    padding: 16px 20px;
+    gap: 12px;
+  }
+
+  .title {
+    font-size: 16px;
+  }
+
+  .backButton,
+  .downloadButton {
+    font-size: 12px;
+    padding: 8px 12px;
+  }
+
+  .viewerContainer {
+    min-height: 400px;
+  }
+}
