@@ -30,7 +30,7 @@
 }
 
 .downloadButton:hover {
-  color: #4A90E2;
+  color: #4a90e2;
 }
 
 .documentTitle {
@@ -59,7 +59,7 @@
 .unreadButton {
   width: 100%;
   padding: 0.875rem 1.5rem;
-  background-color: #2d3748;
+  background-color: #ec221f;
   color: white;
   border: none;
   border-radius: 12px;
@@ -76,7 +76,7 @@
 .readButton {
   width: 100%;
   padding: 0.875rem 1.5rem;
-  background-color: #10b981;
+  background-color: #333333;
   color: white;
   border: none;
   border-radius: 12px;
