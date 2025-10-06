@@ -12,6 +12,9 @@ export interface Document {
   original_filename?: string;
   file_mime_type?: string;
   file_size?: number;
+  pdf_file_path?: string;
+  pdf_file_size?: number;
+  has_pdf?: boolean;
 }
 
 export interface User {
@@ -29,7 +32,11 @@ export interface DocumentsResponse {
 
 export interface DocumentContentResponse {
   document: Document;
-  content: string;
+  file_url: string;
+  file_name: string;
+  file_size: number;
+  mime_type: string;
+  user: User;
 }
 
 // Получение списка документов для сотрудника

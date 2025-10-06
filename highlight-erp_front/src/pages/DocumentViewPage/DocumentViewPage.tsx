@@ -1,7 +1,8 @@
 // src/pages/DocumentViewPage/DocumentViewPage.tsx
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { getDocumentContent, markDocumentAsRead, type Document } from "../../services/documents";
+import { getDocumentContent, markDocumentAsRead, downloadDocument, type Document, type User } from "../../services/documents";
+import PDFViewer from "../../components/PDFViewer";
 import styles from "./DocumentViewPage.module.css";
 
 const DocumentViewPage = () => {
@@ -9,7 +10,8 @@ const DocumentViewPage = () => {
   const navigate = useNavigate();
 
   const [document, setDocument] = useState<Document | null>(null);
-  const [content, setContent] = useState<string>("");
+  const [fileUrl, setFileUrl] = useState<string>("");
+  const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [acknowledging, setAcknowledging] = useState(false);
@@ -24,12 +26,16 @@ const DocumentViewPage = () => {
     try {
       setLoading(true);
       setError(null);
+      console.log('Загрузка документа ID:', docId);
       const data = await getDocumentContent(docId);
+      console.log('Получены данные:', data);
       setDocument(data.document);
-      setContent(data.content);
-    } catch (err) {
-      setError('Ошибка при загрузке документа');
-      console.error('Ошибка:', err);
+      setFileUrl(data.file_url);
+      setUser(data.user);
+    } catch (err: any) {
+      console.error('Ошибка при загрузке:', err);
+      console.error('Детали ошибки:', err.response?.data);
+      setError(err.response?.data?.message || 'Ошибка при загрузке документа');
     } finally {
       setLoading(false);
     }
@@ -62,6 +68,25 @@ const DocumentViewPage = () => {
     navigate('/documents');
   };
 
+  const handleDownload = async () => {
+    if (!document) return;
+
+    try {
+      const blob = await downloadDocument(document.id);
+      const url = window.URL.createObjectURL(blob);
+      const link = window.document.createElement('a');
+      link.href = url;
+      link.download = document.original_filename || 'document.pdf';
+      window.document.body.appendChild(link);
+      link.click();
+      window.document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error('Ошибка при скачивании документа:', err);
+      alert('Ошибка при скачивании документа');
+    }
+  };
+
   if (loading) {
     return (
       <div className={styles.page}>
@@ -92,19 +117,26 @@ const DocumentViewPage = () => {
   return (
     <div className={styles.page}>
       <div className={styles.container}>
-        {/* Заголовок документа */}
+        {/* Заголовок документа с кнопкой скачивания */}
         <div className={styles.header}>
+          <button onClick={handleBack} className={styles.backButton}>
+            ← Назад
+          </button>
           <h1 className={styles.title}>{document.title}</h1>
-          <div className={styles.pageCounter}>1 / 1 стр.</div>
+          <button onClick={handleDownload} className={styles.downloadButton}>
+            ↓ Скачать
+          </button>
         </div>
 
-        {/* Содержимое документа */}
-        <div className={styles.content}>
-          {content ? (
-            <div dangerouslySetInnerHTML={{ __html: content }} />
-          ) : (
-            <p>{document.description}</p>
-          )}
+        {/* PDF Viewer */}
+        <div className={styles.viewerContainer}>
+          <PDFViewer
+            fileUrl={fileUrl}
+            onLoadError={(error) => {
+              console.error('Ошибка загрузки PDF:', error);
+              setError('Ошибка при загрузке PDF документа');
+            }}
+          />
         </div>
 
         {/* Кнопка ознакомления */}
@@ -115,15 +147,11 @@ const DocumentViewPage = () => {
             className={`${styles.acknowledgeButton} ${isAlreadyRead ? styles.alreadyRead : ''}`}
           >
             {isAlreadyRead ? (
-              <>
-                Ознакомлен ✓
-              </>
+              'Ознакомлен ✓'
             ) : acknowledging ? (
               'Отмечаем...'
             ) : (
-              <>
-                Ознакомился ✓
-              </>
+              'Ознакомился'
             )}
           </button>
         </div>

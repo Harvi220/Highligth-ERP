@@ -195,13 +195,16 @@ class DocumentController extends Controller
      */
     public function download(Document $document)
     {
-        if (!$document->file_path || !\Illuminate\Support\Facades\Storage::disk('public')->exists($document->file_path)) {
+        // Используем PDF версию если доступна, иначе оригинальный файл
+        $filePath = $document->pdf_file_path ?? $document->file_path;
+        $filename = $document->pdf_file_path
+            ? pathinfo($document->original_filename, PATHINFO_FILENAME) . '.pdf'
+            : $document->original_filename;
+
+        if (!$filePath || !\Illuminate\Support\Facades\Storage::disk('public')->exists($filePath)) {
             return response()->json(['message' => 'Файл документа не найден.'], 404);
         }
 
-        return \Illuminate\Support\Facades\Storage::disk('public')->download(
-            $document->file_path,
-            $document->original_filename
-        );
+        return \Illuminate\Support\Facades\Storage::disk('public')->download($filePath, $filename);
     }
 }

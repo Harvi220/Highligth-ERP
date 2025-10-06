@@ -8,6 +8,7 @@ use App\Repositories\Admin\Contracts\DocumentRepositoryInterface;
 use App\Repositories\Admin\Contracts\StatisticRepositoryInterface;
 use App\Repositories\Admin\Eloquent\EloquentDocumentRepository;
 use App\Repositories\Admin\Eloquent\EloquentStatisticRepository;
+use App\Services\DocumentConversionService;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -30,6 +31,11 @@ class AppServiceProvider extends ServiceProvider
             StatisticRepositoryInterface::class,
             EloquentStatisticRepository::class
         );
+
+        // Регистрация сервиса конвертации документов
+        $this->app->singleton(DocumentConversionService::class, function ($app) {
+            return new DocumentConversionService();
+        });
     }
 
     /**

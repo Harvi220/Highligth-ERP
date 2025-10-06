@@ -100,14 +100,16 @@ class DocumentController extends Controller
 
         $assignedDocument = $user->documents()->find($document->id);
 
-        
+
         if (!$assignedDocument) {
             return response()->json(['message' => 'Этот документ вам не назначен.'], 403);
         }
 
         // Добавляем статус из pivot-данных
         $assignedDocument->status = $assignedDocument->pivot->status;
-        
+        // Добавляем флаг наличия PDF версии
+        $assignedDocument->has_pdf = !empty($assignedDocument->pdf_file_path);
+
         return (new DocumentResource($assignedDocument))->response();
     }
 
@@ -135,8 +137,14 @@ class DocumentController extends Controller
             return response()->json(['message' => 'Этот документ вам не назначен.'], 403);
         }
 
+        // Используем PDF версию если доступна, иначе оригинальный файл
+        $filePath = $assignedDocument->pdf_file_path ?? $assignedDocument->file_path;
+        $fileName = $assignedDocument->pdf_file_path
+            ? pathinfo($assignedDocument->original_filename, PATHINFO_FILENAME) . '.pdf'
+            : $assignedDocument->original_filename;
+
         // Проверяем наличие файла
-        if (!$assignedDocument->file_path || !Storage::exists($assignedDocument->file_path)) {
+        if (!$filePath || !Storage::disk('public')->exists($filePath)) {
             return response()->json(['message' => 'Файл документа не найден.'], 404);
         }
 
@@ -152,16 +160,16 @@ class DocumentController extends Controller
             'avatar' => $user->avatar_url ?? null,
         ];
 
-        // Получаем URL файла для скачивания
-        $fileUrl = Storage::url($assignedDocument->file_path);
+        // Используем API endpoint вместо прямого URL для избежания CORS проблем
+        $fileUrl = url("/api/employee/documents/{$document->id}/download");
 
         // Возвращаем документ и его содержимое
         return response()->json([
             'document' => new DocumentResource($assignedDocument),
             'file_url' => $fileUrl,
-            'file_name' => basename($assignedDocument->file_path),
-            'file_size' => Storage::size($assignedDocument->file_path),
-            'mime_type' => Storage::mimeType($assignedDocument->file_path),
+            'file_name' => $fileName,
+            'file_size' => Storage::disk('public')->size($filePath),
+            'mime_type' => Storage::disk('public')->mimeType($filePath),
             'user' => $responseUser
         ]);
     }
@@ -194,15 +202,17 @@ class DocumentController extends Controller
             return response()->json(['message' => 'Этот документ вам не назначен.'], 403);
         }
 
-        // Проверяем наличие файла
-        if (!$assignedDocument->file_path || !Storage::disk('public')->exists($assignedDocument->file_path)) {
+        // Используем PDF версию если доступна, иначе оригинальный файл
+        $filePath = $assignedDocument->pdf_file_path ?? $assignedDocument->file_path;
+        $filename = $assignedDocument->pdf_file_path
+            ? pathinfo($assignedDocument->original_filename, PATHINFO_FILENAME) . '.pdf'
+            : $assignedDocument->original_filename;
+
+        if (!$filePath || !Storage::disk('public')->exists($filePath)) {
             return response()->json(['message' => 'Файл документа не найден.'], 404);
         }
 
-        return Storage::disk('public')->download(
-            $assignedDocument->file_path,
-            $assignedDocument->original_filename
-        );
+        return Storage::disk('public')->download($filePath, $filename);
     }
 
 }
