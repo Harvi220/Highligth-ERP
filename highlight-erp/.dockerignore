@@ -3,6 +3,7 @@
 .env
 .env.testing
 node_modules
+public/storage
 vendor
 storage/logs/*
 !storage/logs/.gitkeep
