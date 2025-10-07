@@ -1,0 +1,40 @@
+# Environment files (НИКОГДА не коммитить продакшн переменные!)
+.env
+.env.production
+.env.local
+.env.*.local
+
+# Node modules
+node_modules/
+highlight-erp_front/node_modules/
+
+# Build artifacts
+highlight-erp_front/dist/
+highlight-erp_front/build/
+
+# Backend dependencies
+highlight-erp/vendor/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+highlight-erp/storage/logs/*.log
+
+# Temporary files
+*.tmp
+*.temp
+
+# Kubernetes secrets (если локально тестируете)
+*.secret.yaml
+secret-*.yaml

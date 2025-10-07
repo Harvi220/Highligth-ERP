@@ -14,7 +14,8 @@ RUN apk add --no-cache \
     mysql-client \
     git \
     unzip \
-    supervisor
+    supervisor \
+    nginx
 
 # Установка расширений PHP
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
@@ -62,8 +63,18 @@ COPY ./docker/php/php.ini /usr/local/etc/php/conf.d/custom.ini
 # Копирование конфигурации PHP-FPM
 COPY ./docker/php/www.conf /usr/local/etc/php-fpm.d/www.conf
 
-# Expose порт PHP-FPM
-EXPOSE 9000
+# Копирование конфигурации Nginx для Laravel
+COPY ./nginx-laravel.conf /etc/nginx/http.d/default.conf
 
-# Запуск PHP-FPM
-CMD ["php-fpm"]
+# Создание директории для логов Nginx
+RUN mkdir -p /var/log/nginx \
+    && chown -R www-data:www-data /var/log/nginx
+
+# Копирование supervisor конфигурации
+COPY ./docker/supervisor/supervisord.conf /etc/supervisord.conf
+
+# Expose порты PHP-FPM и Nginx
+EXPOSE 9000 80
+
+# Запуск через supervisor (PHP-FPM + Nginx)
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]
