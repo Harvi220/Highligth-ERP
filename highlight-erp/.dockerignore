@@ -1,62 +1,23 @@
-# Node modules
-node_modules/
-npm-debug.log
-yarn-error.log
-
-# Composer
-/vendor/
-
-# Environment files
-.env
-.env.*
-!.env.example
-
-# IDE
-.idea/
-.vscode/
-*.swp
-*.swo
-*~
-
-# OS
-.DS_Store
-Thumbs.db
-
-# Git
-.git/
+.git
 .gitignore
-.gitattributes
-
-# Tests
-tests/
-phpunit.xml
-.phpunit.result.cache
-
-# Documentation
-*.md
-!README.md
-docs/
-
-# Storage (will be mounted as volume)
-storage/app/*
-storage/framework/cache/*
-storage/framework/sessions/*
-storage/framework/views/*
+.env
+.env.testing
+node_modules
+vendor
 storage/logs/*
-!storage/app/.gitignore
-!storage/app/public/.gitignore
-
-# Bootstrap cache
+!storage/logs/.gitkeep
+storage/framework/cache/*
+!storage/framework/cache/.gitkeep
+storage/framework/sessions/*
+!storage/framework/sessions/.gitkeep
+storage/framework/views/*
+!storage/framework/views/.gitkeep
 bootstrap/cache/*
-
-# Public build files
-public/hot
-public/storage
-public/build
-
-# Misc
-.editorconfig
-.php-cs-fixer.php
-.styleci.yml
-docker-compose.yml
-Dockerfile
+!bootstrap/cache/.gitkeep
+tests
+.phpunit.result.cache
+phpunit.xml
+README.md
+DEPLOYMENT_PLAN.md
+docker
+.k3s
