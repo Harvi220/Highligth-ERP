@@ -49,7 +49,7 @@ docker login registry.zennex.ru
 cd highlight-erp
 
 docker build --no-cache --platform linux/amd64 \
-  -t registry.zennex.ru/highlight-erp/php:latest \
+  -t registry.zennex.ru/zennex/highlight:php \
   -f php.dockerfile .
 ```
 
@@ -59,15 +59,15 @@ docker build --no-cache --platform linux/amd64 \
 cd highlight-erp_front
 
 docker build --no-cache --platform linux/amd64 \
-  -t registry.zennex.ru/highlight-erp/nginx:latest \
+  -t registry.zennex.ru/zennex/highlight:nginx \
   -f nginx.dockerfile .
 ```
 
 ### 5. Отправить образы в Registry
 
 ```bash
-docker push registry.zennex.ru/highlight-erp/php:latest
-docker push registry.zennex.ru/highlight-erp/nginx:latest
+docker push registry.zennex.ru/zennex/highlight:php
+docker push registry.zennex.ru/zennex/highlight:nginx
 ```
 
 ---
@@ -319,16 +319,16 @@ git push
 # PHP
 cd highlight-erp
 docker build --no-cache --platform linux/amd64 \
-  -t registry.zennex.ru/highlight-erp/php:latest \
+  -t registry.zennex.ru/zennex/highlight:php \
   -f php.dockerfile .
-docker push registry.zennex.ru/highlight-erp/php:latest
+docker push registry.zennex.ru/zennex/highlight:php
 
 # Nginx
 cd highlight-erp_front
 docker build --no-cache --platform linux/amd64 \
-  -t registry.zennex.ru/highlight-erp/nginx:latest \
+  -t registry.zennex.ru/zennex/highlight:nginx \
   -f nginx.dockerfile .
-docker push registry.zennex.ru/highlight-erp/nginx:latest
+docker push registry.zennex.ru/zennex/highlight:nginx
 ```
 
 ### 3. Перезапустить deployments на сервере
@@ -439,5 +439,32 @@ kubectl logs -n cert-manager deployment/cert-manager
 
 ---
 
-**Дата создания:** 2025-10-07  
-**Статус:** Готово к деплою
+## 📝 Лог выполнения
+
+### 2025-10-08
+
+#### ✅ Выполнено:
+1. **Авторизация в Docker Registry**
+   - Успешно авторизованы в `registry.zennex.ru`
+
+2. **Сборка и отправка образов**
+   - ✅ Собран образ PHP-FPM: `registry.zennex.ru/zennex/highlight:php`
+   - ✅ Собран образ Nginx: `registry.zennex.ru/zennex/highlight:nginx`
+   - ✅ Оба образа отправлены в Registry и доступны в GitLab Container Registry
+
+#### 🔄 В процессе:
+- Настройка структуры директорий на сервере
+
+#### ⏳ Ожидает выполнения:
+- Копирование манифестов k3s
+- Настройка базы данных
+- Создание Secret с переменными окружения
+- Деплой приложения
+- Выполнение миграций
+- Проверка работоспособности
+
+---
+
+**Дата создания:** 2025-10-07
+**Последнее обновление:** 2025-10-08
+**Статус:** В процессе деплоя

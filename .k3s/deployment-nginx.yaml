@@ -18,7 +18,7 @@ spec:
         - name: registry-secret
       containers:
         - name: nginx
-          image: registry.zennex.ru/highlight-erp/nginx:latest
+          image: registry.zennex.ru/zennex/highlight:nginx
           imagePullPolicy: Always
           ports:
             - containerPort: 80

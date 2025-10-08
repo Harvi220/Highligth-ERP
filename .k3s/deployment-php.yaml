@@ -18,7 +18,7 @@ spec:
         - name: registry-secret
       containers:
         - name: php-fpm
-          image: registry.zennex.ru/highlight-erp/php:latest
+          image: registry.zennex.ru/zennex/highlight:php
           imagePullPolicy: Always
           ports:
             - containerPort: 9000
