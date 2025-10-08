@@ -20,5 +20,4 @@ tests
 phpunit.xml
 README.md
 DEPLOYMENT_PLAN.md
-docker
 .k3s

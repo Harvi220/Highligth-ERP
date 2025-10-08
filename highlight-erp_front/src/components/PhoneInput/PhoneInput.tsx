@@ -12,6 +12,7 @@ interface PhoneInputProps {
   error?: string;
   required?: boolean;
   disabled?: boolean;
+  autoComplete?: string;
 }
 
 const PhoneInput: React.FC<PhoneInputProps> = ({
@@ -22,6 +23,7 @@ const PhoneInput: React.FC<PhoneInputProps> = ({
   error,
   required = false,
   disabled = false,
+  autoComplete = "tel",
 }) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -81,7 +83,7 @@ const PhoneInput: React.FC<PhoneInputProps> = ({
         disabled={disabled}
         aria-invalid={!!error}
         aria-describedby={error ? `${name}-error` : undefined}
-        autoComplete="tel"
+        autoComplete={autoComplete}
       />
       {error && (
         <span id={`${name}-error`} className={styles.errorMessage} role="alert">

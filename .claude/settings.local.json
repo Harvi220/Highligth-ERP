@@ -5,7 +5,8 @@
       "Bash(\"/c/Program Files/LibreOffice/program/soffice.exe\" --version)",
       "Bash(powershell.exe:*)",
       "Bash(npm install:*)",
-      "Bash(php:*)"
+      "Bash(php:*)",
+      "Bash(docker build:*)"
     ],
     "deny": [],
     "ask": []

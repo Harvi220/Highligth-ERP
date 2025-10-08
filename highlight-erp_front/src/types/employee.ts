@@ -9,6 +9,7 @@ export interface Role {
 }
 
 export interface Employee {
+  documents: any;
   id: number;
   last_name: string;
   first_name: string;

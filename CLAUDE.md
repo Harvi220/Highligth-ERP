@@ -321,3 +321,8 @@ npx tsc --noEmit
 10. **Disabled состояние кнопок**: Кнопки "Создать"/"Сохранить" disabled при ошибках валидации или пустых обязательных полях
 - Нужно грамотно подготовиться к деплою для этого ознакомься с инструкцией @"Деплой нового приложения на сервере с k3s _ Инструкция.pdf" и составь план доработак деплоя и план действий который сохрани во врменном файле
 - Давай выполнять деплой согласно плану @DEPLOYMENT_README.md
+- Давай продолжим с деплоем проекта на сервер. Мы уже собрали бэкенд данного проекта и отправили на сервер. Мы пользовались инструкцией @DEPLOYMENT_README.md, но там немного неправильные пути пуша на сервер. Вот правильные команды: docker login registry.zennex.ru; docker build -t registry.zennex.ru/zennex/highlight .; docker push registry.zennex.ru/zennex/highlight.
+- Давай сделаем деплой по @DEPLOYMENT_README.md. При этом ссылки там неправильные. Во первых исправь их. Вот правильные: docker login registry.zennex.ru; docker build -t registry.zennex.ru/zennex/highlight .; docker push registry.zennex.ru/zennex/highlight. Потом назови на сервере созданные такие директории: root@server:/var/www/highlight.zennex.ru# ls -a
+.  ..  conf  log  src
+- Давай сделаем деплой по @DEPLOYMENT_README.md. При этом ссылки там неправильные. Во первых исправь их. Вот правильные: docker login registry.zennex.ru; docker build -t registry.zennex.ru/zennex/highlight .; docker push registry.zennex.ru/zennex/highlight. Потом назови на сервере созданные такие директории: root@server:/var/www/highlight.zennex.ru# ls -a
+.  ..  conf  log  src
