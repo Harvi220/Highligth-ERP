@@ -66,9 +66,10 @@ COPY ./docker/php/www.conf /usr/local/etc/php-fpm.d/www.conf
 # Копирование конфигурации Nginx для Laravel
 COPY ./nginx-laravel.conf /etc/nginx/http.d/default.conf
 
-# Создание директории для логов Nginx
-RUN mkdir -p /var/log/nginx \
-    && chown -R www-data:www-data /var/log/nginx
+# Создание директорий для логов Nginx и Supervisor
+RUN mkdir -p /var/log/nginx /var/log/supervisor \
+    && chown -R www-data:www-data /var/log/nginx \
+    && chmod -R 755 /var/log/supervisor
 
 # Копирование supervisor конфигурации
 COPY ./docker/supervisor/supervisord.conf /etc/supervisord.conf
