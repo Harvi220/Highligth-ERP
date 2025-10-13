@@ -2,7 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Redis;
 
 Route::get('/', function () {
     return 'Hello from Laravel!';
@@ -16,18 +15,11 @@ Route::get('/api/health', function () {
         $dbStatus = 'error: ' . $e->getMessage();
     }
 
-    try {
-        $redisStatus = Redis::connection()->ping() ? 'connected' : 'disconnected';
-    } catch (\Exception $e) {
-        $redisStatus = 'error: ' . $e->getMessage();
-    }
-
     return response()->json([
         'status' => 'healthy',
         'timestamp' => now()->toISOString(),
         'services' => [
             'database' => $dbStatus,
-            'redis' => $redisStatus,
         ],
     ]);
 });

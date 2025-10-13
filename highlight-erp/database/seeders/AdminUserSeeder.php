@@ -26,13 +26,9 @@ class AdminUserSeeder extends Seeder
             'first_name' => 'Иван',
             'patronymic' => 'Иванович',
             'position_id' => $adminPosition->id,
-            //'position' => 'Администратор',
-            'position_id' => $adminPosition->id,
             'phone' => '79990001122',
             'password' => Hash::make('password'),
-            //'role' => 'admin',
             'role_id' => $adminRole->id,
-
         ]);
     }
 }
